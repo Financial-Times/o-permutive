@@ -13,12 +13,13 @@ class Permutive {
 		this.oPermutiveEl = oPermutiveEl;
 		this.options = Object.assign({}, {
 //TODO move these to the DOM element
-			"id" : "e1c3fd73-dd41-4abd-b80b-4278d52bf7aa",
-			"key"	:	"b2b3b748-e1f6-4bd5-b2f2-26debc8075a3",
-			"useApi" : true
+			// "id" : "e1c3fd73-dd41-4abd-b80b-4278d52bf7aa",
+			// "key"	:	"b2b3b748-e1f6-4bd5-b2f2-26debc8075a3",
+			// "useApi" : true
 		}, opts || Permutive.getDataAttributes(oPermutiveEl));
 
-
+console.log(this.options);
+//TODO Consents can be derived outside of the package and passed in as config.
 		function getConsents() {
 			// derive consent options from ft consent cookie
 			const re = /FTConsent=([^;]+)/;
@@ -39,18 +40,21 @@ class Permutive {
 		if (!getConsents().behavioral) {return false;}
 
 		// Run the Permutive bootstrap code
-		bootstrap(this.options.id, this.options.key);
+		bootstrap(this.options.oPermutiveId, this.options.oPermutiveKey);
 
 		//Attach Permutive scripts
 		const HEAD = document.head || document.getElementsByTagName('head')[0];
 		var s = document.createElement("script");
 		s.async;
 		s.type = "text/javascript";
-		s.src = "https://cdn.permutive.com/" + this.options.id + "-web.js";
+		s.src = "https://cdn.permutive.com/" + this.options.oPermutiveId + "-web.js";
 		HEAD.appendChild(s);
 
-		if (this.options.useApi){
-			api().then(
+// possibly meta-data can be passed from a shared state (or o-ads)
+// or possibly pass meta-data as config and / or api-endpoints
+
+		if (this.options.oPermutiveApiendpointUser){
+			api(this.options.oPermutiveApiendpointUser, this.options.oPermutiveApiendpointContent).then(
 				function(res){
 					if (res[0] && res[0].guid) {
 						identifyUser(res[0]);

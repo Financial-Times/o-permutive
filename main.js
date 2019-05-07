@@ -1,7 +1,7 @@
 import Permutive from './src/js/permutive';
 
 const constructAll = function () {
-	Permutive.init();
+	Permutive.init('.o-permutive');
 	document.removeEventListener('o.DOMContentLoaded', constructAll);
 };
 

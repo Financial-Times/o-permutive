@@ -46,8 +46,8 @@ const handleResponse = function(response) {
 	return [userIden, userDemog, pageMeta];
 };
 
-let api = function() {
-	return Promise.all([getUserData("https://ads-api.ft.com/v1/user"), getArticlePageData("https://ads-api.ft.com/v1/content/5cfae92e-6cc5-11e9-80c7-60ee53e6681d")])
+let api = function(userEndpoint, contentEndpoint) {
+	return Promise.all([getUserData(userEndpoint), getArticlePageData(contentEndpoint)])
 		.then(handleResponse.bind(this));
 };
 
