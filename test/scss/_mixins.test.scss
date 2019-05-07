@@ -1,0 +1,19 @@
+@include describe('oPermutive mixins') {
+	@include describe('oPermutive') {
+		@include it('does something') {
+			@include assert() {
+				@include output($selector: false) {
+					.test-mixin {
+						@include oPermutive();
+					}
+				};
+
+				@include expect($selector: false) {
+					.test-mixin .o-permutive {
+						display: block;
+					}
+				};
+			};
+		}
+	}
+}

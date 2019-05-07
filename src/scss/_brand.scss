@@ -1,0 +1,12 @@
+
+/// Helper for `o-brand` function.
+/// @access private
+@function _oPermutiveGet($variables, $from: null) {
+    @return oBrandGet($component: 'o-permutive', $variables: $variables, $from: $from);
+}
+
+/// Helper for `o-brand` function.
+/// @access private
+@function _oPermutiveSupports($variant) {
+    @return oBrandSupportsVariant($component: 'o-permutive', $variant: $variant);
+}

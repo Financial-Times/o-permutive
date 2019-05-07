@@ -1,0 +1,14 @@
+/// Output All oMessage Features
+@mixin oPermutive ($class: 'o-permutive') {
+	.#{$class} {
+		display: block;
+	}
+}
+
+/// Provide a component specific error message
+///
+/// @param {String} $message - The message to insert in the error.
+/// @access Private
+@mixin _oPermutive($message) {
+	@error '*** oPermutive SCSS error: #{$message} ***';
+};
