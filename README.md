@@ -1,11 +1,9 @@
 o-permutive [![Circle CI](https://circleci.com/gh/Financial-Times/o-permutive/tree/master.svg?style=svg)](https://circleci.com/gh/Financial-Times/o-permutive/tree/master)[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](#licence)
 =================
 
-_A short description of what this component does._
+Note! this is a Work In Progress Component.
 
-
-_A table of contents to help people find things_
-
+A component for adding the [Permutive Data Management Platform to a website](https://developer.permutive.com/).
 
 - [Markup](#markup)
 - [JavaScript](#javascript)
@@ -16,13 +14,33 @@ _A table of contents to help people find things_
 - [Contact](#contact)
 - [Licence](#licence)
 
-_Whatever usage instructions your component has. We've broken this down by Markup, JavaScript and Sass, but it depends how complex your component is._
+This component will integrate Permutive's Data Management Platform functionality onto a website. Specifically the component will do the following:
+- Run the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. This code adds a global variable 'permutive' to the window object and sets-up a 'command-queue' - an array under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
+- Check user-consent for behavioural profiling - no Permutive code (including the above mentioned bootstrap code) will be run if a user has not consented to behavioural profiling.
+- Attach the main Permutive JS file to the page DOM.
+- Calls Permutive's api function to link Permutive's unique id assigned to a user with first-party ID's (e.g. User GUIDs, SpoorIDs). This is configurable.
+- Calls Permutives api function for passing meta-data associated with a page visit.
+- Note; Permutive's code integrates with Google DFP for passing user segments into ad-server requests.
 
 ### Markup
 
-_Common templating can go here, especially if there is only one template, but people can always check the demos for more._
+The component takes a number of different configuration options, these are detailed below. Required configuration options are marked as required.
 
-_Remember to start your codeblocks with three backticks and "html" so your markup is syntax highlighted correctly._
+- Public ID *required*; config attribute name "id". String. This is the public ID provided by Permutive.
+- Public Key *required*; config attribute name "key". String. This is the public API key provided by Permutive.
+- User consent. *defaults to false*; config attribute name "consent". Boolean, true/false.
+  The component will not run any Permutive code unless user consent has been explicitly given. This is passed in as a config
+- UserID(s); config attribute name "userids". JSON Object in the format:
+  ``` {
+      id: <userID>,
+      tag: 'SporeID'
+    },
+    {
+      id: <userID>,
+      tag: 'GUID'
+    }
+  ```
+- Page metadata; config attribute name "metadata". JSON Object.
 
 ```html
 <div data-o-component="o-permutive" class='o-permutive'>
@@ -30,9 +48,7 @@ _Remember to start your codeblocks with three backticks and "html" so your marku
 ```
 
 ### JavaScript
-_Remember to start your codeblocks with three backticks and "js" so your js is syntax highlighted correctly._
 
-_Though it's not practical to repeat every aspect of Origami modules convention for every component, **A LOT** of people get tripped up by modules not auto initialising, so this line is useful if you have JavaScript:_
 
 No code will run automatically unless you are using the Build Service.
 You must either construct an `o-permutive` object or fire the `o.DOMContentLoaded` event, which oComponent listens for.
@@ -53,19 +69,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
 });
 ```
-
-### Sass
-_Remember to start your codeblocks with three backticks and "sass" so your markup is syntax highlighted correctly._
-
-_Though it's not practical to repeat every aspect of Origami modules convention for every component, **A LOT** of people get tripped up by silent mode, so this line (remember to change the o-permutive to your component name) is useful if you have Sass:_
-
-As with all Origami components, o-permutive has a [silent mode](http://origami.ft.com/docs/syntax/scss/#silent-styles). To use its compiled CSS (rather than using its mixins with your own Sass) set `$o-permutive-is-silent : false;` in your Sass before you import the o-permutive Sass.
+TODO - documentation.
 
 ## Troubleshooting
-_This is a good place to put problems that come up repeatedly_
 
-## Contributing
-If your component is particularly complicated (image sets fall into this category) then a contributing section or even a contributing.md might be useful.
+TODO
 
 ## Migration
 
@@ -79,7 +87,7 @@ State | Major Version | Last Minor Release | Migration guide |
 
 ## Contact
 
-If you have any questions or comments about this component, or need help using it, please either [raise an issue](https://github.com/Financial-Times/o-permutive/issues), visit [#ft-origami](https://financialtimes.slack.com/messages/ft-origami/) or email [Origami Support](mailto:origami-support@ft.com).
+If you have any questions or comments about this component, or need help using it, please either [raise an issue](https://github.com/Financial-Times/o-permutive/issues), visit [#advertising-dev](https://financialtimes.slack.com/messages/advertising-dev/) or email [FT Advertising-dev Support](mailto:origami.advertising.technology@ft.com).
 
 ## Licence
 

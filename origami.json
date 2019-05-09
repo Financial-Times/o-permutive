@@ -1,16 +1,19 @@
 {
-	"description": "component description",
+	"description": "WIP/experimental - Integrates Permutive Datamanagement platform into a website",
 	"keywords": [],
 	"origamiType": "module",
 	"origamiCategory": "components",
 	"origamiVersion": 1,
 	"support": "https://github.com/Financial-Times/o-permutive/issues",
 	"supportContact": {
-		"email": "YOUR-TEAM@ft.com",
-		"slack": "financialtimes/YOUR-SLACK-CHANNEL"
+		"email": "origami.advertising.technology@ft.com",
+		"slack": "financialtimes/advertising-dev"
 	},
 	"supportStatus": "experimental",
-	"browserFeatures": {},
+	"browserFeatures": {
+		"required": [
+			"Promise"
+		]},
 	"ci": {
 		"circle": "https://circleci.com/api/v1/project/Financial-Times/o-permutive"
 	},
@@ -22,17 +25,10 @@
 	},
 	"demos": [
 		{
-			"title": "A Useful Demo",
-			"name": "demo",
+			"title": "Demo",
+			"name": "Set config declaritively",
 			"template": "demos/src/demo.mustache",
-			"description": "Description of the demo"
-		},
-		{
-			"title": "Pa11y",
-			"name": "pa11y",
-			"template": "demos/src/pa11y.mustache",
-			"description": "Accessibility test will be run against this demo",
-			"hidden": true
+			"description": ""
 		}
 	]
 }
