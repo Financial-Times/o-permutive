@@ -1,4 +1,4 @@
-pAddon = function(userDemog, pageMeta){
+let pAddon = function(userDemog, pageMeta){
 let user = {user : Object.assign(userDemog)};
 let data = {page : Object.assign(pageMeta, user)};
 console.log(data);
