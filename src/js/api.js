@@ -46,8 +46,8 @@ const handleResponse = function(response) {
 	return [userIden, userDemog, pageMeta];
 };
 
-let api = function(userEndpoint, contentEndpoint) {
-	return Promise.all([getUserData(userEndpoint), getArticlePageData(contentEndpoint)])
+let api = function(userEndpoint, contentEndpoint, contentId) {
+	return Promise.all([getUserData(userEndpoint), getArticlePageData(contentEndpoint + contentId)])
 		.then(handleResponse.bind(this));
 };
 

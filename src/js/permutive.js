@@ -40,21 +40,21 @@ console.log(this.options);
 		if (!getConsents().behavioral) {return false;}
 
 		// Run the Permutive bootstrap code
-		bootstrap(this.options.oPermutiveId, this.options.oPermutiveKey);
+		bootstrap(this.options.publicApiKeys.id, this.options.publicApiKeys.key);
 
 		//Attach Permutive scripts
 		const HEAD = document.head || document.getElementsByTagName('head')[0];
 		var s = document.createElement("script");
 		s.async;
 		s.type = "text/javascript";
-		s.src = "https://cdn.permutive.com/" + this.options.oPermutiveId + "-web.js";
+		s.src = "https://cdn.permutive.com/" + this.options.publicApiKeys.id + "-web.js";
 		HEAD.appendChild(s);
 
 // possibly meta-data can be passed from a shared state (or o-ads)
 // or possibly pass meta-data as config and / or api-endpoints
 
-		if (this.options.oPermutiveApiendpointUser){
-			api(this.options.oPermutiveApiendpointUser, this.options.oPermutiveApiendpointContent).then(
+		if (this.options.adsApi){
+			api(this.options.adsApi.user, this.options.adsApi.content, this.options.appInfo.contentId ).then(
 				function(res){
 					if (res[0] && res[0].guid) {
 						identifyUser(res[0]);
