@@ -11,12 +11,7 @@ class Permutive {
 	 */
 	constructor (oPermutiveEl, opts) {
 		this.oPermutiveEl = oPermutiveEl;
-		this.options = Object.assign({}, {
-//TODO move these to the DOM element
-			// "id" : "e1c3fd73-dd41-4abd-b80b-4278d52bf7aa",
-			// "key"	:	"b2b3b748-e1f6-4bd5-b2f2-26debc8075a3",
-			// "useApi" : true
-		}, opts || Permutive.getDataAttributes(oPermutiveEl));
+		this.options = Object.assign({}, {}, opts || Permutive.getDataAttributes(oPermutiveEl));
 
 console.log(this.options);
 //TODO Consents can be derived outside of the package and passed in as config.

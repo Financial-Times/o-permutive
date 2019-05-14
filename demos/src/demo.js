@@ -11,7 +11,7 @@ let oPermConf = {
 		},
 		"publicApiKeys" : {
 			"id" : "e1c3fd73-dd41-4abd-b80b-4278d52bf7aa",
-			"key" : "b2b3b748-e1f6-4bd5-b2f2-26debc8075a"
+			"key" : "b2b3b748-e1f6-4bd5-b2f2-26debc8075a3"
 		},
 		"adsApi" : {
 			"user" : "https://ads-api.ft.com/v1/user",

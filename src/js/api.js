@@ -1,6 +1,4 @@
 
-
-
 const getUserData = function(target) {
 	if(!target) { return Promise.resolve({}); }
 	return fetch(target, {
