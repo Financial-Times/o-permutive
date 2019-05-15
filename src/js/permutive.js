@@ -13,7 +13,6 @@ class Permutive {
 		this.oPermutiveEl = oPermutiveEl;
 		this.options = Object.assign({}, {}, opts || Permutive.getDataAttributes(oPermutiveEl));
 
-console.log(this.options);
 //TODO Consents can be derived outside of the package and passed in as config.
 		function getConsents() {
 			// derive consent options from ft consent cookie

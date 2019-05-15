@@ -26,7 +26,10 @@ const getArticlePageData = function(target, timeout) {
 const handleResponse = function(response) {
 		let userIden = {};
 		let userDemog = {};
-		let pageMeta = {};
+		let pageMeta = {
+			"type" : "article",
+			"article" : {}
+		};
 
  if (response[0] && response[0].dfp && response[0].dfp.targeting ) {
 	 userIden.spoorID = response[0].dfp.targeting[0].value;
@@ -38,7 +41,7 @@ const handleResponse = function(response) {
  }
 
  if (response[1] && response[1].krux && response[1].krux.attributes ) {
- 	pageMeta.topics = response[1].krux.attributes[0].value;
+ 	pageMeta.article.topics = response[1].krux.attributes[0].value;
  }
 
 	return [userIden, userDemog, pageMeta];
