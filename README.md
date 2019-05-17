@@ -5,6 +5,8 @@ Note! this is a Work In Progress Component.
 
 A component for adding the [Permutive Data Management Platform to a website](https://developer.permutive.com/).
 
+- [Functionality Overview](#Functionality)
+- [Deployment](#Deployment)
 - [Markup](#markup)
 - [JavaScript](#javascript)
 - [Sass](#sass)
@@ -14,15 +16,28 @@ A component for adding the [Permutive Data Management Platform to a website](htt
 - [Contact](#contact)
 - [Licence](#licence)
 
+### Functionality Overview
 This component will integrate Permutive's Data Management Platform functionality onto a website. Specifically the component will do the following:
-- Run the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. This code adds a global variable 'permutive' to the window object and sets-up a 'command-queue' - an array under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
+- Run the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. A global variable 'permutive' is added to the window object and  a 'command-queue' array is defined under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
 - Check user-consent for behavioural profiling - no Permutive code (including the above mentioned bootstrap code) will be run if a user has not consented to behavioural profiling.
 - Attach the main Permutive JS file to the page DOM.
 - Calls Permutive's api function to link Permutive's unique id assigned to a user with first-party ID's (e.g. User GUIDs, SpoorIDs). This is configurable.
 - Calls Permutives api function for passing meta-data associated with a page visit.
 - Note; Permutive's code integrates with Google DFP for passing user segments into ad-server requests.
 
-### Markup
+### Deployment
+The o-permutive component can be deployed in the same way as all standard Origami components; either via the Build-service or as a Bower dependancy, (an NPM compatible version of the component is being worked on for a furture release). See the [Origami tutorials](https://origami.ft.com/docs/tutorials/) for more details on how Origami components can be deployed or integrated into a build-pipeline.
+
+### Configuration
+The component takes a number of different configuration options, these are detailed below.
+
+| Name              | Key               |      | Required?  |
+| ------------------|:-----------------:|----- | -----:|
+| Public project ID | publicApiKeys.id  |------| yes   |
+| col 2 is          | publicApiKeys.key |------| yes   |
+| zebra stripes     | are neat          |------| no    |
+
+#### Markup
 
 The component takes a number of different configuration options, these are detailed below. Required configuration options are marked as required.
 
