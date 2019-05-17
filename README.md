@@ -18,10 +18,10 @@ A component for adding the [Permutive Data Management Platform to a website](htt
 
 ### Functionality Overview
 This component will integrate Permutive's Data Management Platform functionality onto a website. Specifically the component will do the following:
-- Run the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. A global variable 'permutive' is added to the window object and  a 'command-queue' array is defined under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
-- Check user-consent for behavioural profiling - no Permutive code (including the above mentioned bootstrap code) will be run if a user has not consented to behavioural profiling.
-- Attach the main Permutive JS file to the page DOM.
-- Calls Permutive's api function to link Permutive's unique id assigned to a user with first-party ID's (e.g. User GUIDs, SpoorIDs). This is configurable.
+- Runs the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. A global variable, 'permutive' is added to the window object and  a 'command-queue' array is defined under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
+- Checks for user-consent for behavioural profiling - no Permutive code (including the above mentioned bootstrap code) will be run if a user has not consented to behavioural profiling.
+- Attaches the main Permutive JS file to the page DOM.
+- Calls Permutive's api function to link Permutive's unique id assigned to a user/device with first-party ID's (e.g. User GUIDs, SpoorIDs). This is configurable.
 - Calls Permutives api function for passing meta-data associated with a page visit.
 - Note; Permutive's code integrates with Google DFP for passing user segments into ad-server requests.
 
@@ -31,20 +31,17 @@ The o-permutive component can be deployed in the same way as all standard Origam
 ### Configuration
 The component takes a number of different configuration options, these are detailed below.
 
-| Name              | Key               |      | Required?  |
-| ------------------|:-----------------:|----- | -----:|
-| Public project ID | publicApiKeys.id  |------| yes   |
-| col 2 is          | publicApiKeys.key |------| yes   |
-| zebra stripes     | are neat          |------| no    |
+| Name              | Key               |   Type   | Required?| Notes |
+|-------------------|-------------------|----------|---------:|-------|
+| Public project ID | publicApiKeys.id  | String   | yes      |This is the project ID provided by Permutive. |
+| Public api key    | publicApiKeys.key | String   | yes      |This is the public API key provided by Permutive.|
+| User consent      | consent        | Boolean true/false default is false  | no       |  The component will not run any Permutive code unless user consent has been explicitly given. This can be passed in as a config or for FT sites can be derived via the ftconsent cookie, see below.|
+
 
 #### Markup
 
-The component takes a number of different configuration options, these are detailed below. Required configuration options are marked as required.
-
-- Public ID *required*; config attribute name "id". String. This is the public ID provided by Permutive.
-- Public Key *required*; config attribute name "key". String. This is the public API key provided by Permutive.
 - User consent. *defaults to false*; config attribute name "consent". Boolean, true/false.
-  The component will not run any Permutive code unless user consent has been explicitly given. This is passed in as a config
+
 - UserID(s); config attribute name "userids". JSON Object in the format:
   ``` {
       id: <userID>,
