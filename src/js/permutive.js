@@ -110,7 +110,7 @@ class Permutive {
 	}
 
 	/**
-	 * Wrapper to make the pAddon method public
+	 * Add data to Permutive
 	 * @param {Object} userDemog
 	 * @param {Object} pageMeta
 	 */
