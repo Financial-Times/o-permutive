@@ -111,8 +111,8 @@ class Permutive {
 
 	/**
 	 * Wrapper to make the pAddon method public
-	 * @param {Object} userDemog 
-	 * @param {Object} pageMeta 
+	 * @param {Object} userDemog
+	 * @param {Object} pageMeta
 	 */
 	static pAddon(userDemog, pageMeta) {
 		let user = { "user": Object.assign(userDemog) };
