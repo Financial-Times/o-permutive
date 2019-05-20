@@ -1,6 +1,5 @@
 import bootstrap from './bootstrap';
 import api from './api';
-import pAddon from './pAddon';
 import identifyUser from './identifyUser';
 
 class Permutive {
@@ -53,7 +52,7 @@ class Permutive {
 					if (res[0] && res[0].guid) {
 						identifyUser(res[0]);
 					}
-					pAddon(res[1], res[2]);
+					Permutive.pAddon(res[1], res[2]);
 				}
 			);
 		}
@@ -108,6 +107,17 @@ class Permutive {
 			return new Permutive(rootEl, opts);
 		}
 		return Array.from(rootEl.querySelectorAll('[data-o-component="o-permutive"]'), rootEl => new Permutive(rootEl, opts));
+	}
+
+	/**
+	 * Wrapper to make the pAddon method public
+	 * @param {Object} userDemog 
+	 * @param {Object} pageMeta 
+	 */
+	static pAddon(userDemog, pageMeta) {
+		let user = { "user": Object.assign(userDemog) };
+		let data = { "page": Object.assign(pageMeta, user) };
+		window.permutive.addon('web', data);
 	}
 }
 
