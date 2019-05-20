@@ -9,11 +9,11 @@ class Permutive {
 	 * @param {HTMLElement} [oPermutiveEl] - The component element in the DOM
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 */
-	constructor (oPermutiveEl, opts) {
+	constructor(oPermutiveEl, opts) {
 		this.oPermutiveEl = oPermutiveEl;
 		this.options = Object.assign({}, {}, opts || Permutive.getDataAttributes(oPermutiveEl));
 
-//TODO Consents can be derived outside of the package and passed in as config.
+		//TODO Consents can be derived outside of the package and passed in as config.
 		function getConsents() {
 			// derive consent options from ft consent cookie
 			const re = /FTConsent=([^;]+)/;
@@ -21,7 +21,7 @@ class Permutive {
 			if (!match) {
 				// cookie stasis or no consent cookie found
 				return {
-					behavioral : false
+					behavioral: false
 				};
 			}
 			const consentCookie = decodeURIComponent(match[1]);
@@ -31,25 +31,25 @@ class Permutive {
 		}
 
 		//By default Permutive assumes consent has been given - we should not run any permutive code when we dont have user consent for behavioural profiling.
-		if (!getConsents().behavioral) {return false;}
+		if (!getConsents().behavioral) { return false; }
 
 		// Run the Permutive bootstrap code
 		bootstrap(this.options.publicApiKeys.id, this.options.publicApiKeys.key);
 
 		//Attach Permutive scripts
+		const s = document.createElement("script");
 		const HEAD = document.head || document.getElementsByTagName('head')[0];
-		var s = document.createElement("script");
-		s.async;
+		s.async = "true";
 		s.type = "text/javascript";
 		s.src = "https://cdn.permutive.com/" + this.options.publicApiKeys.id + "-web.js";
 		HEAD.appendChild(s);
 
-// possibly meta-data can be passed from a shared state (or o-ads)
-// or possibly pass meta-data as config and / or api-endpoints
+		// possibly meta-data can be passed from a shared state (or o-ads)
+		// or possibly pass meta-data as config and / or api-endpoints
 
-		if (this.options.adsApi){
-			api(this.options.adsApi.user, this.options.adsApi.content, this.options.appInfo.contentId ).then(
-				function(res){
+		if (this.options.adsApi) {
+			api(this.options.adsApi.user, this.options.adsApi.content, this.options.appInfo.contentId).then(
+				function (res) {
 					if (res[0] && res[0].guid) {
 						identifyUser(res[0]);
 					}
@@ -65,7 +65,7 @@ class Permutive {
 	 * @param {HTMLElement} oPermutiveEl - The component element in the DOM
 	 * @returns {Object} - Data attributes as an object
 	 */
-	static getDataAttributes (oPermutiveEl) {
+	static getDataAttributes(oPermutiveEl) {
 		if (!(oPermutiveEl instanceof HTMLElement)) {
 			return {};
 		}
@@ -97,7 +97,7 @@ class Permutive {
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 * @returns {(Permutive|Array<Permutive>)} - Permutive instance(s)
 	 */
-	static init (rootEl, opts) {
+	static init(rootEl, opts) {
 		if (!rootEl) {
 			rootEl = document.body;
 		}
