@@ -31,28 +31,67 @@ The o-permutive component can be deployed in the same way as all standard Origam
 ### Configuration
 The component takes a number of different configuration options, these are detailed below.
 
+##### Basic config options
+These are the minimum set of config options required to run the Permutive component.
+
 | Name              | Key               |   Type   | Required?| Notes |
 |-------------------|-------------------|----------|---------:|-------|
 | Public project ID | publicApiKeys.id  | String   | yes      |This is the project ID provided by Permutive. |
 | Public api key    | publicApiKeys.key | String   | yes      |This is the public API key provided by Permutive.|
-| User consent      | consent        | Boolean true/false default is false  | no       |  The component will not run any Permutive code unless user consent has been explicitly given. This can be passed in as a config or for FT sites can be derived via the ftconsent cookie, see below.|
+| User consent      | consent.behavioural        | Boolean true/false default is false  | no       |  The component will not run any Permutive code unless user consent has been explicitly given. This can be passed in as a config or for FT sites can be derived via the ftconsent cookie, see below.|
+| Use FT consent cookie| consent.useFtCookie | Bolean true/false | no |If true, user consent will be derived via the ftconsent cookie |
 
+##### User identification config options  
+Supply these config options if you wish to make use of Permutive's User Identity Matching features whereby Permutive's unique user ID can be mapped to first-party User IDs. This would be needed for cross-device User matching for example.
 
-#### Markup
+| Name              | |Data-structure              | Required?| Notes |
+|-------------------|---|-----------------------------|---------:|-------|
+| User IDs Array    | userIDs  | Array of objects. See example below | yes, see notes | Required if cross device user matching is required and not using the FT ads-api |
+| User Api Endpoint | userApi  |String | no | Required if cross device user matching is required and User Identity information is available via the FT ads-api or other api that returns data in a specified format. |
 
-- User consent. *defaults to false*; config attribute name "consent". Boolean, true/false.
+###### Example config object for User Ids
 
-- UserID(s); config attribute name "userids". JSON Object in the format:
-  ``` {
-      id: <userID>,
-      tag: 'SporeID'
-    },
-    {
-      id: <userID>,
-      tag: 'GUID'
-    }
-  ```
-- Page metadata; config attribute name "metadata". JSON Object.
+```javascript
+userIds = [
+  {
+    id: <userID>,
+    tag: 'SporeID'
+  },
+  {
+    id: <userID>,
+    tag: 'GUID'
+  }]
+```
+
+##### Page metadata options
+The following data-points may be passed to Permutive on each page request. All data-points are optional; however the schema is fixed, meaning that any data passed that is not in the format specified below will be rejected.
+Any data-point below may be omitted if it is not available or not relevant for the page request.
+
+```
+page: {
+		  "type": "<STRING>", // e.g. "home" or "article"
+		  "article": {
+				"id": "<STRING>",
+				"title": "<STRING>",
+				"type": "<STRING>", // genre
+				"organisations": ["<LIST>", "<OF>", "<STRINGS>"],
+				"people": ["<LIST>", "<OF>", "<STRINGS>"],
+				"categories": ["<LIST>", "<OF>", "<STRINGS>"],
+				"authors": ["<LIST>", "<OF>", "<STRINGS>"],
+				"topics": ["LIST", "OF", "STRINGS"],
+				"admants": ["LIST", "OF", "STRINGS"]
+		  },
+      "user": {
+        "industry": "<STRING>",
+        "position": "<STRING>",
+        "responsibility": "<STRING>"
+      }
+		}
+  });
+```
+
+### Markup
+
 
 ```html
 <div data-o-component="o-permutive" class='o-permutive'>
