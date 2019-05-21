@@ -8,9 +8,11 @@ import OPermutive from './../main';
 describe("OPermutive", () => {
 	beforeEach(() => {
 		const permutiveScript = document.getElementById('permutive-script');
-		permutiveScript && permutiveScript.parentNode.removeChild(permutiveScript);
-		console.log('permutiveScript', permutiveScript);
-	})
+		if(permutiveScript) {
+			permutiveScript.parentNode.removeChild(permutiveScript);
+		};
+	});
+
 	it('is defined', () => {
 		proclaim.equal(typeof OPermutive, 'function');
 	});
@@ -81,7 +83,6 @@ describe("OPermutive", () => {
 
 			it("should not attach the permutive script to the DOM", () => {
 				const permutiveScript = document.getElementById('permutive-script');
-				console.log(permutiveScript);
 				proclaim.isNull(permutiveScript);
 			});
 
@@ -94,13 +95,13 @@ describe("OPermutive", () => {
 		describe('Consent is set', () => {
 			beforeEach(() => {
 				document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-				OPermutive.init('#element', { 
+				OPermutive.init('#element', {
 					publicApiKeys: {
 						id: "1",
 						key: "key"
 					}
 				});
-			})
+			});
 
 			it("should attach the permutive script", () => {
 				const permutiveScript = document.getElementById('permutive-script');

@@ -19,7 +19,7 @@ function getConsents() {
 	};
 }
 
-function attachPermutiveScript() {
+function attachPermutiveScript(options) {
 	const url = "https://cdn.permutive.com/" + options.publicApiKeys.id + "-web.js";
 	if(!document.querySelector(`script[src="${url}"]`)) {
 		const s = document.createElement("script");
@@ -41,22 +41,22 @@ class Permutive {
 	 */
 	constructor(oPermutiveEl, opts) {
 		const options = Object.assign({}, opts || Permutive.getDataAttributes(oPermutiveEl));
-		
+
 		if(!options.publicApiKeys) {
 			return false;
 		}
 
-		// By default Permutive assumes consent has been given - 
+		// By default Permutive assumes consent has been given -
 		// we should not run any permutive code when we dont have user
 		// consent for behavioural profiling.
-		if (!getConsents().behavioral) { 
-			return false; 
+		if (!getConsents().behavioral) {
+			return false;
 		}
 
 		// Run the Permutive bootstrap code
 		bootstrap(options.publicApiKeys.id, options.publicApiKeys.key);
 
-		attachPermutiveScript()
+		attachPermutiveScript(options);
 
 		// possibly meta-data can be passed from a shared state (or o-ads)
 		// or possibly pass meta-data as config and / or api-endpoints
