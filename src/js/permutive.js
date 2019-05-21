@@ -2,6 +2,37 @@ import bootstrap from './bootstrap';
 import api from './api';
 import identifyUser from './identifyUser';
 
+// TODO Consents can be derived outside of the package and passed in as config.
+function getConsents() {
+	// derive consent options from ft consent cookie
+	const re = /FTConsent=([^;]+)/;
+	const match = document.cookie.match(re);
+	if (!match) {
+		// cookie stasis or no consent cookie found
+		return {
+			behavioral: false
+		};
+	}
+	const consentCookie = decodeURIComponent(match[1]);
+	return {
+		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1
+	};
+}
+
+function attachPermutiveScript() {
+	const url = "https://cdn.permutive.com/" + options.publicApiKeys.id + "-web.js";
+	if(!document.querySelector(`script[src="${url}"]`)) {
+		const s = document.createElement("script");
+		const HEAD = document.head || document.getElementsByTagName('head')[0];
+		s.async = "true";
+		s.type = "text/javascript";
+		s.id = "permutive-script";
+		s.src = "https://cdn.permutive.com/" + options.publicApiKeys.id + "-web.js";
+		HEAD.appendChild(s);
+	}
+}
+
+
 class Permutive {
 	/**
 	 * Class constructor.
@@ -9,45 +40,28 @@ class Permutive {
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 */
 	constructor(oPermutiveEl, opts) {
-		this.oPermutiveEl = oPermutiveEl;
-		this.options = Object.assign({}, {}, opts || Permutive.getDataAttributes(oPermutiveEl));
-
-		//TODO Consents can be derived outside of the package and passed in as config.
-		function getConsents() {
-			// derive consent options from ft consent cookie
-			const re = /FTConsent=([^;]+)/;
-			const match = document.cookie.match(re);
-			if (!match) {
-				// cookie stasis or no consent cookie found
-				return {
-					behavioral: false
-				};
-			}
-			const consentCookie = decodeURIComponent(match[1]);
-			return {
-				behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1
-			};
+		const options = Object.assign({}, opts || Permutive.getDataAttributes(oPermutiveEl));
+		
+		if(!options.publicApiKeys) {
+			return false;
 		}
 
-		//By default Permutive assumes consent has been given - we should not run any permutive code when we dont have user consent for behavioural profiling.
-		if (!getConsents().behavioral) { return false; }
+		// By default Permutive assumes consent has been given - 
+		// we should not run any permutive code when we dont have user
+		// consent for behavioural profiling.
+		if (!getConsents().behavioral) { 
+			return false; 
+		}
 
 		// Run the Permutive bootstrap code
-		bootstrap(this.options.publicApiKeys.id, this.options.publicApiKeys.key);
+		bootstrap(options.publicApiKeys.id, options.publicApiKeys.key);
 
-		//Attach Permutive scripts
-		const s = document.createElement("script");
-		const HEAD = document.head || document.getElementsByTagName('head')[0];
-		s.async = "true";
-		s.type = "text/javascript";
-		s.src = "https://cdn.permutive.com/" + this.options.publicApiKeys.id + "-web.js";
-		HEAD.appendChild(s);
+		attachPermutiveScript()
 
 		// possibly meta-data can be passed from a shared state (or o-ads)
 		// or possibly pass meta-data as config and / or api-endpoints
-
-		if (this.options.adsApi) {
-			api(this.options.adsApi.user, this.options.adsApi.content, this.options.appInfo.contentId).then(
+		if (options.adsApi) {
+			api(options.adsApi.user, options.adsApi.content, options.appInfo.contentId).then(
 				function (res) {
 					if (res[0] && res[0].guid) {
 						identifyUser(res[0]);
