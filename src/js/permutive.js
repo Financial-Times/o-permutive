@@ -1,6 +1,9 @@
 import bootstrap from './bootstrap';
 import api from './api';
 import identifyUser from './identifyUser';
+import merge from 'lodash.merge'
+
+const ATTRIBUTE_PATTERN = 'oPermutive'
 
 // TODO Consents can be derived outside of the package and passed in as config.
 function getConsents() {
@@ -72,6 +75,50 @@ class Permutive {
 		}
 	}
 
+	static mapKey(key) {
+		switch(key) {
+			case 'apiinfo':
+				return 'apiInfo'
+				break
+			case 'contentapi':
+				return 'contentApi'
+				break
+			case 'contentid':
+				return 'contentId'
+				break
+			case 'ocomponent':
+				return 'oComponent'
+				break
+			case 'pagetype':
+				return 'pageType'
+				break
+			case 'userapi':
+				return 'userApi'
+				break
+			default:
+				return key
+		}
+	}
+
+	static attributeToOption({ optKey, optValue }) {
+		const regex = new RegExp(`(^${ATTRIBUTE_PATTERN})?([A-Z][a-z]+)`, 'g')
+		const [mWhole, mPrefix, mOpt] = regex.exec(optKey) || []
+
+		const shortOptKey = mPrefix
+			? mOpt
+				? mOpt
+				: optKey
+			: optKey
+
+		const [mWhole2, mPrefix2, mOpt2] = regex.exec(optKey) || []
+
+		return {
+			[Permutive.mapKey(shortOptKey.toLowerCase())]: mOpt2
+				? { [Permutive.mapKey(mOpt2.toLowerCase())]: optValue }
+				: optValue,
+		}
+	}
+
 	/**
 	 * Get the data attributes from the PermutiveElement. If the component is being set up
 	 * declaratively, this method is used to extract the data attributes from the DOM.
@@ -82,26 +129,10 @@ class Permutive {
 		if (!(oPermutiveEl instanceof HTMLElement)) {
 			return {};
 		}
-		return Object.keys(oPermutiveEl.dataset).reduce((options, key) => {
 
-			// Ignore data-o-component
-			if (key === 'oComponent') {
-				return options;
-			}
-
-			// Build a concise key and get the option value
-			const shortKey = key.replace(/^oPermutive(w)(w+)$/, (m, m1, m2) => m1.toLowerCase() + m2);
-			const value = oPermutiveEl.dataset[key];
-
-			// Try parsing the value as JSON, otherwise just set it as a string
-			try {
-				options[shortKey] = JSON.parse(value.replace(/'/g, '"'));
-			} catch (error) {
-				options[shortKey] = value;
-			}
-
-			return options;
-		}, {});
+		return merge({}, ...Object.keys(oPermutiveEl.dataset)
+			.map((optKey) => this.attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }))
+		)
 	}
 
 	/**
@@ -112,7 +143,7 @@ class Permutive {
 	 */
 	static init(rootEl, opts) {
 		if (!rootEl) {
-			rootEl = document.body;
+			rootEl = document.head;
 		}
 		if (!(rootEl instanceof HTMLElement)) {
 			rootEl = document.querySelector(rootEl);
