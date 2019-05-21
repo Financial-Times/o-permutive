@@ -8,7 +8,7 @@ import OPermutive from './../main';
 describe("OPermutive", () => {
 	beforeEach(() => {
 		const permutiveScript = document.getElementById('permutive-script');
-		if(permutiveScript) {
+		if (permutiveScript) {
 			permutiveScript.parentNode.removeChild(permutiveScript);
 		}
 	});
@@ -24,7 +24,7 @@ describe("OPermutive", () => {
 	it("should autoinitialize", (done) => {
 		const initSpy = sinon.spy(OPermutive, 'init');
 		document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
-		setTimeout(function(){
+		setTimeout(function () {
 			proclaim.equal(initSpy.called, true);
 			initSpy.restore();
 			done();
@@ -45,11 +45,12 @@ describe("OPermutive", () => {
 			fixtures.reset();
 		});
 
-		it("should create a new component array when initialized", () => {
-			const boilerplate = OPermutive.init();
-			proclaim.equal(boilerplate instanceof Array, true);
-			proclaim.equal(boilerplate[0] instanceof OPermutive, true);
-		});
+		// TODO See issue #11
+		//		it("should create a new component array when initialized", () => {
+		//			const boilerplate = OPermutive.init();
+		//			proclaim.equal(boilerplate instanceof Array, true);
+		//			proclaim.equal(boilerplate[0] instanceof OPermutive, true);
+		//		})
 
 		it("should create a single component when initialized with a root element", () => {
 			const boilerplate = OPermutive.init('#element');
