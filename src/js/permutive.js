@@ -1,9 +1,9 @@
 import bootstrap from './bootstrap';
 import api from './api';
 import identifyUser from './identifyUser';
-import merge from 'lodash.merge'
+import merge from 'lodash.merge';
 
-const ATTRIBUTE_PATTERN = 'oPermutive'
+const ATTRIBUTE_PATTERN = 'oPermutive';
 
 // TODO Consents can be derived outside of the package and passed in as config.
 function getConsents() {
@@ -78,45 +78,39 @@ class Permutive {
 	static mapKey(key) {
 		switch(key) {
 			case 'apiinfo':
-				return 'apiInfo'
-				break
+				return 'apiInfo';
 			case 'contentapi':
-				return 'contentApi'
-				break
+				return 'contentApi';
 			case 'contentid':
-				return 'contentId'
-				break
+				return 'contentId';
 			case 'ocomponent':
-				return 'oComponent'
-				break
+				return 'oComponent';
 			case 'pagetype':
-				return 'pageType'
-				break
+				return 'pageType';
 			case 'userapi':
-				return 'userApi'
-				break
+				return 'userApi';
 			default:
-				return key
+				return key;
 		}
 	}
 
 	static attributeToOption({ optKey, optValue }) {
-		const regex = new RegExp(`(^${ATTRIBUTE_PATTERN})?([A-Z][a-z]+)`, 'g')
-		const [mWhole, mPrefix, mOpt] = regex.exec(optKey) || []
+		const regex = new RegExp(`(^${ATTRIBUTE_PATTERN})?([A-Z][a-z]+)`, 'g');
+		const [/* mWhole */, mPrefix, mOpt] = regex.exec(optKey) || [];
 
 		const shortOptKey = mPrefix
 			? mOpt
 				? mOpt
 				: optKey
-			: optKey
+			: optKey;
 
-		const [mWhole2, mPrefix2, mOpt2] = regex.exec(optKey) || []
+		const [/* mWhole2 */, /* mPrefix2 */, mOpt2] = regex.exec(optKey) || [];
 
 		return {
 			[Permutive.mapKey(shortOptKey.toLowerCase())]: mOpt2
 				? { [Permutive.mapKey(mOpt2.toLowerCase())]: optValue }
 				: optValue,
-		}
+		};
 	}
 
 	/**
@@ -132,7 +126,7 @@ class Permutive {
 
 		return merge({}, ...Object.keys(oPermutiveEl.dataset)
 			.map((optKey) => this.attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }))
-		)
+		);
 	}
 
 	/**
