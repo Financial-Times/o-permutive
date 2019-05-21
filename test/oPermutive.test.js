@@ -10,7 +10,7 @@ describe("OPermutive", () => {
 		const permutiveScript = document.getElementById('permutive-script');
 		if(permutiveScript) {
 			permutiveScript.parentNode.removeChild(permutiveScript);
-		};
+		}
 	});
 
 	it('is defined', () => {
