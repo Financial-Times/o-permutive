@@ -8,6 +8,8 @@
 		"lodash.merge": "^4.6.1"
 	},
 	"husky": {
-		"pre-push": "obt verify && obt test"
+		"hooks": {
+			"pre-push": "obt verify && obt test"
+		}
 	}
 }
