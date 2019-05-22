@@ -5,5 +5,8 @@
 	"private": true,
 	"dependencies": {
 		"lodash.merge": "^4.6.1"
+	},
+	"scripts": {
+		"prepush": "obt verify && obt test"
 	}
 }
