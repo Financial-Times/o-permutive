@@ -14,19 +14,19 @@ const OPTION_PARENT_NODES = [
 	'pageType',
 	'publicApiKeys',
 	'userApi'
-]
+];
 
 const formatOptionName = key => {
-	const keyLower = key.toLowerCase()
+	const keyLower = key.toLowerCase();
 
 	for (const mapped of OPTION_PARENT_NODES) {
 		if (mapped.toLowerCase() === keyLower) {
-			return mapped
+			return mapped;
 		}
 	}
 
-	return keyLower
-}
+	return keyLower;
+};
 
 const validateOptions = ({ opts, oPermutiveEl }) => {
 	const options = Object.assign({}, opts || Permutive.getDataAttributes(oPermutiveEl));
@@ -36,7 +36,7 @@ const validateOptions = ({ opts, oPermutiveEl }) => {
 	}
 
 	return options;
-}
+};
 
 // TODO Consents can be derived outside of the package and passed in as config.
 function getConsents() {
@@ -83,7 +83,7 @@ class Permutive {
 			return false;
 		}
 
-		const options = validateOptions({ opts, oPermutiveEl })
+		const options = validateOptions({ opts, oPermutiveEl });
 
 		// Run the Permutive bootstrap code
 		bootstrap(options.publicApiKeys.id, options.publicApiKeys.key);
