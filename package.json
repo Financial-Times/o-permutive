@@ -1,12 +1,13 @@
 {
 	"devDependencies": {
-		"eslint-config-origami-component": "^1.0.0"
+		"eslint-config-origami-component": "^1.0.0",
+		"husky": "^2.3.0"
 	},
 	"private": true,
 	"dependencies": {
 		"lodash.merge": "^4.6.1"
 	},
-	"scripts": {
-		"prepush": "obt verify && obt test"
+	"husky": {
+		"pre-push": "obt verify && obt test"
 	}
 }
