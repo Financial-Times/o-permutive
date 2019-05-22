@@ -9,7 +9,8 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-push": "obt verify && obt test"
+			"pre-push": "obt verify && obt test",
+			"pre-commit": "obt test"
 		}
 	}
 }
