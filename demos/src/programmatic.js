@@ -17,10 +17,13 @@ let oPermConf = {
 };
 
 document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
+
+// Initialise oPermutive individually
 new Permutive(false, oPermConf);
 
+// Set the page metadata
 Permutive.pAddon({
 	user: "something",
 }, {
 	contentId: "123",
-})
+});

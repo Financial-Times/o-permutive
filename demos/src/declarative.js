@@ -14,4 +14,5 @@ const pageData = {
 
 document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
+// Set the page metadata
 oPermutive.pAddon(userDemog, pageData);
