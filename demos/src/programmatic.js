@@ -18,3 +18,9 @@ let oPermConf = {
 
 document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 new Permutive(false, oPermConf);
+
+Permutive.pAddon({
+	user: "something",
+}, {
+	contentId: "123",
+})
