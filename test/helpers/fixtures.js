@@ -21,9 +21,20 @@ function insert(html) {
 
 
 function htmlCode () {
-	const html = `<div>
-		<div class="o-permutive" data-o-component="o-permutive" id="element"></div>
-	</div>
+	const html = `
+		<!doctype html>
+		<html>
+			<head>
+				<meta
+					id="element"
+					class="o-permutive"
+					data-o-component="o-permutive"
+					data-o-permutive-publicApiKeys-id="api-id-123"
+					data-o-permutive-publicApiKeys-key="api-key-456"
+				>
+				</meta>
+			</head>
+		</html>
 	`;
 	insert(html);
 }

@@ -5,6 +5,39 @@ import merge from 'lodash.merge';
 
 const ATTRIBUTE_PATTERN = 'oPermutive';
 
+const OPTION_PARENT_NODES = [
+	'adsApi',
+	'appInfo',
+	'contentApi',
+	'contentId',
+	'oComponent',
+	'pageType',
+	'publicApiKeys',
+	'userApi'
+];
+
+const formatOptionName = key => {
+	const keyLower = key.toLowerCase();
+
+	for (const mapped of OPTION_PARENT_NODES) {
+		if (mapped.toLowerCase() === keyLower) {
+			return mapped;
+		}
+	}
+
+	return keyLower;
+};
+
+const validateOptions = ({ opts, oPermutiveEl }) => {
+	const options = Object.assign({}, opts || Permutive.getDataAttributes(oPermutiveEl));
+
+	if (!options.publicApiKeys) {
+		throw new Error('o-permutive: No public API Keys found in options.');
+	}
+
+	return options;
+};
+
 // TODO Consents can be derived outside of the package and passed in as config.
 function getConsents() {
 	// derive consent options from ft consent cookie
@@ -43,18 +76,14 @@ class Permutive {
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 */
 	constructor(oPermutiveEl, opts) {
-		const options = Object.assign({}, opts || Permutive.getDataAttributes(oPermutiveEl));
-
-		if(!options.publicApiKeys) {
-			return false;
-		}
-
 		// By default Permutive assumes consent has been given -
 		// we should not run any permutive code when we dont have user
 		// consent for behavioural profiling.
 		if (!getConsents().behavioral) {
 			return false;
 		}
+
+		const options = validateOptions({ opts, oPermutiveEl });
 
 		// Run the Permutive bootstrap code
 		bootstrap(options.publicApiKeys.id, options.publicApiKeys.key);
@@ -75,25 +104,13 @@ class Permutive {
 		}
 	}
 
-	static mapKey(key) {
-		switch(key) {
-			case 'apiinfo':
-				return 'apiInfo';
-			case 'contentapi':
-				return 'contentApi';
-			case 'contentid':
-				return 'contentId';
-			case 'ocomponent':
-				return 'oComponent';
-			case 'pagetype':
-				return 'pageType';
-			case 'userapi':
-				return 'userApi';
-			default:
-				return key;
-		}
-	}
-
+	/**
+	 * Extract the option's path from an attribute name in camelCase form - coming from the component's dataset -
+	 * and returns a single element object.
+	 * @param {String} optKey - The attribute name in camelCase form, taken from the component's dataset. e.g., publicapikeysId
+	 * @param {String} optValue - The value assigned to optKey.
+	 * @returns {Object} - An object containing a single { key: "value" } or { key: { subkey: value } }
+	 */
 	static attributeToOption({ optKey, optValue }) {
 		const regex = new RegExp(`(^${ATTRIBUTE_PATTERN})?([A-Z][a-z]+)`, 'g');
 		const [/* mWhole */, mPrefix, mOpt] = regex.exec(optKey) || [];
@@ -107,8 +124,8 @@ class Permutive {
 		const [/* mWhole2 */, /* mPrefix2 */, mOpt2] = regex.exec(optKey) || [];
 
 		return {
-			[Permutive.mapKey(shortOptKey.toLowerCase())]: mOpt2
-				? { [Permutive.mapKey(mOpt2.toLowerCase())]: optValue }
+			[formatOptionName(shortOptKey)]: mOpt2
+				? { [formatOptionName(mOpt2)]: optValue }
 				: optValue,
 		};
 	}
@@ -142,10 +159,16 @@ class Permutive {
 		if (!(rootEl instanceof HTMLElement)) {
 			rootEl = document.querySelector(rootEl);
 		}
-		if (rootEl instanceof HTMLElement && rootEl.matches('[data-o-component=o-permutive]')) {
-			return new Permutive(rootEl, opts);
+		if (rootEl instanceof HTMLElement) {
+			if (rootEl.matches('[data-o-component="o-permutive"]')) {
+				return new Permutive(rootEl, opts);
+			}
+
+			const permutiveEl = rootEl.querySelector('[data-o-component="o-permutive"]');
+			if (permutiveEl) {
+				return new Permutive(permutiveEl, opts);
+			}
 		}
-		return Array.from(rootEl.querySelectorAll('[data-o-component="o-permutive"]'), rootEl => new Permutive(rootEl, opts));
 	}
 
 	/**
