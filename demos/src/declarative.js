@@ -3,7 +3,7 @@ import oPermutive from '../../main.js';
 
 const userDemog = {
 	"some": "thing"
-}
+};
 
 const pageData = {
 	"appInfo": {

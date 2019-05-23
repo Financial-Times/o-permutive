@@ -1,5 +1,5 @@
 /*global require*/
-import oPermutive from '../../main.js';
+import Permutive from '../../main.js';
 
 let oPermConf = {
 	"appInfo": {
@@ -17,4 +17,4 @@ let oPermConf = {
 };
 
 document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-new oPermutive(false, oPermConf);
+new Permutive(false, oPermConf);
