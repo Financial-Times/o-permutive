@@ -9,7 +9,6 @@ const OPTION_PARENT_NODES = [
 	'contentApi',
 	'contentId',
 	'oComponent',
-	'pageType',
 	'publicApiKeys',
 	'userApi'
 ];
