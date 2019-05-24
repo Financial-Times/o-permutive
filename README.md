@@ -53,41 +53,41 @@ Supply these config options if you wish to make use of Permutive's User Identity
 
 ```javascript
 userIds = [
-  {
-    id: <userID>,
-    tag: 'SporeID'
-  },
-  {
-    id: <userID>,
-    tag: 'GUID'
-  }]
+	{
+		id: <userID>,
+		tag: 'SporeID'
+	},
+	{
+		id: <userID>,
+		tag: 'GUID'
+	}
+]
 ```
 
 ##### Page metadata options
 The following data-points may be passed to Permutive on each page request. All data-points are optional; however the schema is fixed, meaning that any data passed that is not in the format specified below will be rejected.
 Any data-point below may be omitted if it is not available or not relevant for the page request.
 
-```
-page: {
-		  "type": "<STRING>", // e.g. "home" or "article"
-		  "article": {
-				"id": "<STRING>",
-				"title": "<STRING>",
-				"type": "<STRING>", // genre
-				"organisations": ["<LIST>", "<OF>", "<STRINGS>"],
-				"people": ["<LIST>", "<OF>", "<STRINGS>"],
-				"categories": ["<LIST>", "<OF>", "<STRINGS>"],
-				"authors": ["<LIST>", "<OF>", "<STRINGS>"],
-				"topics": ["LIST", "OF", "STRINGS"],
-				"admants": ["LIST", "OF", "STRINGS"]
-		  },
-      "user": {
-        "industry": "<STRING>",
-        "position": "<STRING>",
-        "responsibility": "<STRING>"
-      }
-		}
-  });
+```json
+page = {
+	"type": "<STRING>", // e.g. "home" or "article"
+	"article": {
+		"id": "<STRING>",
+		"title": "<STRING>",
+		"type": "<STRING>", // genre
+		"organisations": ["<LIST>", "<OF>", "<STRINGS>"],
+		"people": ["<LIST>", "<OF>", "<STRINGS>"],
+		"categories": ["<LIST>", "<OF>", "<STRINGS>"],
+		"authors": ["<LIST>", "<OF>", "<STRINGS>"],
+		"topics": ["LIST", "OF", "STRINGS"],
+		"admants": ["LIST", "OF", "STRINGS"]
+	},
+	"user": {
+		"industry": "<STRING>",
+		"position": "<STRING>",
+		"responsibility": "<STRING>"
+	}
+}
 ```
 
 ### Markup
