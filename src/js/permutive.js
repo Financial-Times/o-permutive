@@ -30,7 +30,7 @@ function attachPermutiveScript(options) {
 	const permutiveURI = getPScriptURI(options.publicApiKeys.id);
 
 	if (!document.querySelector(`script[src="${permutiveURI}"]`)) {
-		const scriptTag = document.createElement("script")
+		const scriptTag = document.createElement("script");
 		Object.assign(scriptTag, {
 			async: "true",
 			type: "text/javascript",
