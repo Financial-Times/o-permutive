@@ -45,4 +45,4 @@ export const attributeToOption = ({ optKey, optValue }) => {
 			? { [formatOptionName(mOpt2)]: optValue }
 			: optValue,
 	};
-}
+};

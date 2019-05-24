@@ -2,10 +2,12 @@ import merge from 'lodash.merge';
 import bootstrap from './bootstrap';
 import api from './api';
 import identifyUser from './identifyUser';
-import { attributeToOption } from './attributes'
+import { attributeToOption } from './attributes';
+
+const PERMUTIVE_URL = "https://cdn.permutive.com";
 
 const getPScriptURI = permutiveApiId =>
-	`https://cdn.permutive.com/${permutiveApiId}-web.js`;
+	`${PERMUTIVE_URL}/${permutiveApiId}-web.js`;
 
 // TODO Consents can be derived outside of the package and passed in as config.
 function getConsents() {
@@ -20,12 +22,12 @@ function getConsents() {
 	}
 	const consentCookie = decodeURIComponent(match[1]);
 	return {
-		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1
+		behavioral: consentCookie.includes('behaviouraladsOnsite:on')
 	};
 }
 
 function attachPermutiveScript(options) {
-	const permutiveURI = getPScriptURI(options.publicApiKeys.id)
+	const permutiveURI = getPScriptURI(options.publicApiKeys.id);
 
 	if (!document.querySelector(`script[src="${permutiveURI}"]`)) {
 		const scriptTag = document.createElement("script", {
@@ -132,8 +134,10 @@ class Permutive {
 	 * @param {Object} userDemog
 	 * @param {Object} pageMeta
 	 */
-	static pAddon(page = { type, user, page }) {
-		window.permutive.addon('web', page);
+	static pAddon(userDemog, pageMeta) {
+		let user = { "user": Object.assign(userDemog) };
+		let data = { "page": Object.assign(pageMeta, user) };
+		window.permutive.addon('web', data);
 	}
 
 	/**
