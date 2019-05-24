@@ -68,7 +68,7 @@ userIds = [
 The following data-points may be passed to Permutive on each page request. All data-points are optional; however the schema is fixed, meaning that any data passed that is not in the format specified below will be rejected.
 Any data-point below may be omitted if it is not available or not relevant for the page request.
 
-```json
+```javascript
 page = {
 	"type": "<STRING>", // e.g. "home" or "article"
 	"article": {
