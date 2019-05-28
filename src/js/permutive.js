@@ -1,8 +1,6 @@
 import bootstrap from './bootstrap';
 import api from './api';
-import identifyUser from './identifyUser';
 import merge from 'lodash.merge';
-
 const ATTRIBUTE_PATTERN = 'oPermutive';
 
 // TODO Consents can be derived outside of the package and passed in as config.
@@ -67,7 +65,7 @@ class Permutive {
 			api(options.adsApi.user, options.adsApi.content, options.appInfo.contentId).then(
 				function (res) {
 					if (res[0] && res[0].guid) {
-						identifyUser(res[0]);
+						Permutive.identifyUser(res[0]);
 					}
 					Permutive.pAddon(res[1], res[2]);
 				}
@@ -154,7 +152,7 @@ class Permutive {
 	 * @param {Object} userDemog
 	 * @param {Object} pageMeta
 	 */
-	let pAddon(userDemog, pageMeta) {
+	static pAddon(userDemog, pageMeta) {
 		let user = { "user": Object.assign(userDemog) };
 		let data = { "page": Object.assign(pageMeta, user) };
 		window.permutive.addon('web', data);
@@ -164,7 +162,18 @@ class Permutive {
 	 * Send User Identity data to Permutive
 	 * @param {Object} userIds
 	 */
-	static identifyUser identifyUser
+	static identifyUser(userIden) {
+		window.permutive.identify([
+			{
+				id: userIden.spoorID,
+				tag: 'SporeID'
+			},
+			{
+				id: userIden.guid,
+				tag: 'GUID'
+			}
+		]);
+	}
 
 	/**
 	 * Send Page-visit meta data to Permutive
