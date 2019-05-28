@@ -149,14 +149,23 @@ class Permutive {
 	}
 
 	/**
-	 * Add data to Permutive
+	 * Temporary method while ads-api call is still inside oPermutive oComponent
+	 * TODO: remove ads-api from o-permutive and pass all page-meta-data via public method
 	 * @param {Object} userDemog
 	 * @param {Object} pageMeta
 	 */
-	static pAddon(userDemog, pageMeta) {
+	let pAddon(userDemog, pageMeta) {
 		let user = { "user": Object.assign(userDemog) };
 		let data = { "page": Object.assign(pageMeta, user) };
 		window.permutive.addon('web', data);
+	}
+
+	/**
+	 * Send Page-visit meta data to Permutive
+	 * @param {Object} pageMeta
+	 */
+	static setPageMetaData(pageMeta) {
+		window.permutive.addon('web', pageMeta);
 	}
 }
 
