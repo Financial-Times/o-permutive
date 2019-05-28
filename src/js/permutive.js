@@ -1,7 +1,6 @@
 import merge from 'lodash.merge';
 import bootstrap from './bootstrap';
 import api from './api';
-import identifyUser from './identifyUser';
 import { attributeToOption } from './attributes';
 
 const PERMUTIVE_URL = "https://cdn.permutive.com";
