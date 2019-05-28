@@ -161,6 +161,12 @@ class Permutive {
 	}
 
 	/**
+	 * Send User Identity data to Permutive
+	 * @param {Object} userIds
+	 */
+	static identifyUser identifyUser
+
+	/**
 	 * Send Page-visit meta data to Permutive
 	 * @param {Object} pageMeta
 	 */
