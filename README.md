@@ -36,8 +36,8 @@ These are the minimum set of config options required to run the Permutive compon
 
 | Name              | Key               |   Type   | Required?| Notes |
 |-------------------|-------------------|----------|---------:|-------|
-| Public project ID | publicApiKeys.id  | String   | yes      |This is the project ID provided by Permutive. |
-| Public api key    | publicApiKeys.key | String   | yes      |This is the public API key provided by Permutive.|
+| Public project ID | projectId  | String   | yes      |This is the project ID provided by Permutive. |
+| Public api key    | publicApiKey | String   | yes      |This is the public API key provided by Permutive.|
 | User consent      | consent.behavioural        | Boolean true/false default is false  | no       |  The component will not run any Permutive code unless user consent has been explicitly given. This can be passed in as a config or for FT sites can be derived via the ftconsent cookie, see below.|
 | Use FT consent cookie| consent.useFtCookie | Bolean true/false | no |If true, user consent will be derived via the ftconsent cookie |
 

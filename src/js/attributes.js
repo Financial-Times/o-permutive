@@ -1,11 +1,11 @@
 const ATTRIBUTE_PATTERN = 'oPermutive';
 const OPTION_PARENT_NODES = [
-	'adsApi',
 	'appInfo',
 	'contentApi',
 	'contentId',
 	'oComponent',
-	'publicApiKeys',
+	'projectId',
+	'publicApiKey',
 	'userApi'
 ];
 
@@ -24,7 +24,7 @@ const formatOptionName = key => {
 /**
  * Extract the option's path from an attribute name in camelCase form - coming from the component's dataset -
  * and returns a single element object.
- * @param {String} optKey - The attribute name in camelCase form, taken from the component's dataset. e.g., publicapikeysId
+ * @param {String} optKey - The attribute name in camelCase form, taken from the component's dataset.
  * @param {String} optValue - The value assigned to optKey.
  * @returns {Object} - An object containing a single { key: "value" } or { key: { subkey: value } }
  */

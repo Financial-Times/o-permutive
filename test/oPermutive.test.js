@@ -68,10 +68,8 @@ describe("OPermutive", () => {
 			beforeEach(() => {
 				document.cookie = document.cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 				OPermutive.init('#element', {
-					publicApiKeys: {
-						id: "1",
-						key: "key"
-					}
+					projectId: "1",
+					publicApiKey: "key"
 				});
 			});
 
@@ -90,10 +88,8 @@ describe("OPermutive", () => {
 			beforeEach(() => {
 				document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 				OPermutive.init('#element', {
-					publicApiKeys: {
-						id: "1",
-						key: "key"
-					}
+					projectId: "1",
+					publicApiKey: "key"
 				});
 			});
 

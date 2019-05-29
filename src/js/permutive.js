@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-import bootstrap from './bootstrap';
+import { bootstrapPolyfill, bootstrapConfig } from './bootstrap';
 import { attributeToOption } from './attributes';
 
 const PERMUTIVE_URL = "https://cdn.permutive.com";
@@ -11,8 +11,10 @@ const getPScriptURI = permutiveApiId =>
 function validateOptions (opts, oPermutiveEl) {
 	const options = Object.assign({}, opts || getDataAttributes(oPermutiveEl));
 
-	if (!options.publicApiKeys) {
-		throw new Error('o-permutive: No public API Keys found in options.');
+	console.log(options.publicApiKey)
+	console.log(options.projectId);
+	if (!(options.publicApiKey && options.projectId)) {
+		throw new Error('o-permutive: No project ID or public API Key found in options.');
 	}
 
 	return options;
@@ -48,7 +50,7 @@ function getConsents() {
 }
 
 function attachPermutiveScript(options) {
-	const permutiveURI = getPScriptURI(options.publicApiKeys.id);
+	const permutiveURI = getPScriptURI(options.projectId);
 
 	if (!document.querySelector(`script[src="${permutiveURI}"]`)) {
 		const scriptTag = document.createElement("script");
@@ -82,7 +84,7 @@ class Permutive {
 		const options = validateOptions(opts, oPermutiveEl);
 
 		// Run the Permutive bootstrap code
-		bootstrap(options.publicApiKeys.id, options.publicApiKeys.key);
+		bootstrapConfig(options.projectId, options.publicApiKey);
 
 		attachPermutiveScript(options);
 	}
@@ -109,6 +111,8 @@ class Permutive {
 			if (permutiveEl) {
 				return new Permutive(permutiveEl, opts);
 			}
+			
+			throw new Error('o-permutive: could not initialise. No element of type [data-o-component="o-permutive"] found on the page');
 		}
 	}
 
@@ -134,8 +138,18 @@ class Permutive {
 	 * @param {Object} pageMeta
 	 */
 	static setPageMetaData(pageMeta) {
-		window.permutive.addon('web', pageMeta);
+		if(window.permutive) {
+			window.permutive.addon('web', pageMeta);
+		} else {
+			window.permutive = {
+				q: [function() { window.permutive.addon('web', pageMeta) }]
+			}
+		}
 	}
 }
+
+// Need to call here so that window.permutive is 
+// available to public methods of Permutive()
+bootstrapPolyfill();
 
 export default Permutive;
