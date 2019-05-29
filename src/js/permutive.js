@@ -11,8 +11,6 @@ const getPScriptURI = permutiveApiId =>
 function validateOptions (opts, oPermutiveEl) {
 	const options = Object.assign({}, opts || getDataAttributes(oPermutiveEl));
 
-	console.log(options.publicApiKey)
-	console.log(options.projectId);
 	if (!(options.publicApiKey && options.projectId)) {
 		throw new Error('o-permutive: No project ID or public API Key found in options.');
 	}
@@ -111,7 +109,7 @@ class Permutive {
 			if (permutiveEl) {
 				return new Permutive(permutiveEl, opts);
 			}
-			
+
 			throw new Error('o-permutive: could not initialise. No element of type [data-o-component="o-permutive"] found on the page');
 		}
 	}
@@ -142,13 +140,13 @@ class Permutive {
 			window.permutive.addon('web', pageMeta);
 		} else {
 			window.permutive = {
-				q: [function() { window.permutive.addon('web', pageMeta) }]
-			}
+				q: [function() { window.permutive.addon('web', pageMeta); }]
+			};
 		}
 	}
 }
 
-// Need to call here so that window.permutive is 
+// Need to call here so that window.permutive is
 // available to public methods of Permutive()
 bootstrapPolyfill();
 
