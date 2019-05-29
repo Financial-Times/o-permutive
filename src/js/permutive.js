@@ -1,30 +1,11 @@
-import bootstrap from './bootstrap';
 import merge from 'lodash.merge';
-const ATTRIBUTE_PATTERN = 'oPermutive';
+import bootstrap from './bootstrap';
+import { attributeToOption } from './attributes';
 
-const OPTION_PARENT_NODES = [
-	'adsApi',
-	'appInfo',
-	'contentApi',
-	'contentId',
-	'oComponent',
-	'pageType',
-	'publicApiKeys',
-	'userApi'
-];
+const PERMUTIVE_URL = "https://cdn.permutive.com";
 
-
-function formatOptionName(key) {
-	const keyLower = key.toLowerCase();
-
-	for (const mapped of OPTION_PARENT_NODES) {
-		if (mapped.toLowerCase() === keyLower) {
-			return mapped;
-		}
-	}
-
-	return keyLower;
-}
+const getPScriptURI = permutiveApiId =>
+	`${PERMUTIVE_URL}/${permutiveApiId}-web.js`;
 
 
 function validateOptions (opts, oPermutiveEl) {
@@ -49,34 +30,6 @@ function getDataAttributes(oPermutiveEl) {
 }
 
 
-/**
- * Extract the option's path from an attribute name in camelCase form - coming from the component's dataset -
- * and returns a single element object.
- *
- * @param {String} optKey - The attribute name in camelCase form, taken from the component's dataset. e.g., publicapikeysId
- * @param {String} optValue - The value assigned to optKey.
- * @returns {Object} - An object containing a single { key: "value" } or { key: { subkey: value } }
- */
-function attributeToOption({ optKey, optValue }) {
-	const regex = new RegExp(`(^${ATTRIBUTE_PATTERN})?([A-Z][a-z]+)`, 'g');
-	const [/* mWhole */, mPrefix, mOpt] = regex.exec(optKey) || [];
-
-	const shortOptKey = mPrefix
-		? mOpt
-			? mOpt
-			: optKey
-		: optKey;
-
-	const [/* mWhole2 */, /* mPrefix2 */, mOpt2] = regex.exec(optKey) || [];
-
-	return {
-		[formatOptionName(shortOptKey)]: mOpt2
-			? { [formatOptionName(mOpt2)]: optValue }
-			: optValue,
-	};
-}
-
-
 // TODO Consents can be derived outside of the package and passed in as config.
 function getConsents() {
 	// derive consent options from ft consent cookie
@@ -90,21 +43,24 @@ function getConsents() {
 	}
 	const consentCookie = decodeURIComponent(match[1]);
 	return {
-		behavioral: consentCookie.indexOf('behaviouraladsOnsite:on') !== -1
+		behavioral: consentCookie.includes('behaviouraladsOnsite:on')
 	};
 }
 
+function attachPermutiveScript(options) {
+	const permutiveURI = getPScriptURI(options.publicApiKeys.id);
 
-function attachPermutiveScript(ApiKeyId) {
-	const url = `https://cdn.permutive.com/${ApiKeyId}-web.js`;
-	if(!document.querySelector(`script[src="${url}"]`)) {
-		const s = document.createElement("script");
+	if (!document.querySelector(`script[src="${permutiveURI}"]`)) {
+		const scriptTag = document.createElement("script");
+		Object.assign(scriptTag, {
+			async: "true",
+			type: "text/javascript",
+			id: "permutive-script",
+			src: permutiveURI,
+		});
+
 		const HEAD = document.head || document.getElementsByTagName('head')[0];
-		s.async = "true";
-		s.type = "text/javascript";
-		s.id = "permutive-script";
-		s.src = "https://cdn.permutive.com/" + ApiKeyId + "-web.js";
-		HEAD.appendChild(s);
+		HEAD.appendChild(scriptTag);
 	}
 }
 
