@@ -3,26 +3,32 @@ import proclaim from 'proclaim';
 import sinon from 'sinon/pkg/sinon';
 import * as fixtures from './helpers/fixtures';
 
-import OPermutive from './../main';
+import oPermutive from './../main';
+
+function resetOPermutive() {
+	oPermutive.resetInstance();
+	delete window.permutive.config;
+}
 
 describe("OPermutive", () => {
 	beforeEach(() => {
+		resetOPermutive();
 		const permutiveScript = document.getElementById('permutive-script');
 		if (permutiveScript) {
 			permutiveScript.parentNode.removeChild(permutiveScript);
 		}
 	});
-
+	
 	it('is defined', () => {
-		proclaim.equal(typeof OPermutive, 'function');
+		proclaim.equal(typeof oPermutive, 'function');
 	});
 
 	it('has a static init method', () => {
-		proclaim.equal(typeof OPermutive.init, 'function');
+		proclaim.equal(typeof oPermutive.init, 'function');
 	});
 
 	it("should autoinitialize", (done) => {
-		const initSpy = sinon.spy(OPermutive, 'init');
+		const initSpy = sinon.stub(oPermutive, 'init');
 		document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
 		setTimeout(function () {
 			proclaim.equal(initSpy.called, true);
@@ -32,45 +38,58 @@ describe("OPermutive", () => {
 	});
 
 	it("should not autoinitialize when the event is not dispached", () => {
-		const initSpy = sinon.spy(OPermutive, 'init');
+		const initSpy = sinon.stub(oPermutive, 'init');
 		proclaim.equal(initSpy.called, false);
+		initSpy.restore();
+	});
+
+	it("should polyfill window.permutive", () => {
+		proclaim.equal(typeof window.permutive, 'object');
 	});
 
 	describe("oPermutive is initialised - init()", () => {
-		beforeEach(() => {
+		it("should create a single component when initialized with a root element", () => {
 			fixtures.htmlCode();
-		});
-
-		afterEach(() => {
+			const boilerplate = oPermutive.init('#element');
+			proclaim.equal(boilerplate instanceof oPermutive, true);
 			fixtures.reset();
 		});
 
-		it("should create a single component when initialized with a root element", () => {
-			const boilerplate = OPermutive.init('#element');
-			proclaim.equal(boilerplate instanceof OPermutive, true);
-		});
+		describe("Missing permutive API key or project id", () => {
+			beforeEach(() => {
+				fixtures.htmlCode('basic');
+			});
 
-		describe("Missing permutive API key or id", () => {
+			afterEach(() => {
+				fixtures.reset();
+			});
+
 			it("should not attach the permutive script to the DOM", () => {
-				OPermutive.init();
 				const permutiveScript = document.getElementById('permutive-script');
+				proclaim.throws(oPermutive.init());
 				proclaim.isNull(permutiveScript);
 			});
 
 			it("should not bootstrap permutive", () => {
-				OPermutive.init();
-				// TODO: check bootstrap function not called
+				proclaim.throws(oPermutive.init());
+				proclaim.notOk(window.permutive.config);
 			});
 		});
 
 
 		describe("Consent is NOT set", () => {
 			beforeEach(() => {
+				fixtures.htmlCode('basic');
 				document.cookie = document.cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-				OPermutive.init('#element', {
+				oPermutive.init('#element', {
 					projectId: "1",
 					publicApiKey: "key"
 				});
+				
+			});
+
+			afterEach(() => {
+				fixtures.reset();
 			});
 
 			it("should not attach the permutive script to the DOM", () => {
@@ -79,18 +98,23 @@ describe("OPermutive", () => {
 			});
 
 			it("should not bootstrap permutive", () => {
-				// TODO: check bootstrap function not called
+				proclaim.notOk(window.permutive.config);
 			});
 		});
 
 
 		describe('Consent is set', () => {
 			beforeEach(() => {
+				fixtures.htmlCode('basic');
 				document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-				OPermutive.init('#element', {
+				oPermutive.init('#element', {
 					projectId: "1",
 					publicApiKey: "key"
 				});
+			});
+
+			afterEach(() => {
+				fixtures.reset();
 			});
 
 			it("should attach the permutive script", () => {
@@ -99,13 +123,7 @@ describe("OPermutive", () => {
 			});
 
 			it("should bootstrap permutive", () => {
-				// TODO: Check bootstrap function is called
-			});
-
-			describe("Ads API is set", () => {
-				it("should add the data to permutive", () => {
-					// TODO: Once we come finalise solution for getting data from ads-api
-				});
+				proclaim.ok(window.permutive.config);
 			});
 		});
 	});
