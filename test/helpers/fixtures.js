@@ -20,7 +20,11 @@ function insert(html) {
 }
 
 
-function htmlCode () {
+function htmlCode (type) {
+	let config = ` data-o-permutive-projectId="id-123" data-o-permutive-publicApiKey="api-key-456"`;
+	if(type === 'basic') {
+		config = '';
+	}
 	const html = `
 		<!doctype html>
 		<html>
@@ -29,8 +33,7 @@ function htmlCode () {
 					id="element"
 					class="o-permutive"
 					data-o-component="o-permutive"
-					data-o-permutive-publicApiKeys-id="api-id-123"
-					data-o-permutive-publicApiKeys-key="api-key-456"
+					${config}
 				>
 				</meta>
 			</head>
