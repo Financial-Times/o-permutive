@@ -46,8 +46,7 @@ Supply these config options if you wish to make use of Permutive's User Identity
 
 | Name              | |Data-structure              | Required?| Notes |
 |-------------------|---|-----------------------------|---------:|-------|
-| User IDs Array    | userIDs  | Array of objects. See example below | yes, see notes | Required if cross device user matching is required and not using the FT ads-api |
-| User Api Endpoint | userApi  |String | no | Required if cross device user matching is required and User Identity information is available via the FT ads-api or other api that returns data in a specified format. |
+| User IDs Array    | userIDs  | Array of objects. See example below | yes, see notes | Required if cross device user matching is required |
 
 ###### Example config object for User Ids
 

@@ -94,7 +94,7 @@ export function getConsentFromFtCookie() {
 		};
 	}
 	const consentCookie = decodeURIComponent(match[1]);
-	
+
 	return consentCookie.includes('behaviouraladsOnsite:on');
 }
 
