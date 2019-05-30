@@ -18,7 +18,7 @@ describe("OPermutive", () => {
 			permutiveScript.parentNode.removeChild(permutiveScript);
 		}
 	});
-	
+
 	it('is defined', () => {
 		proclaim.equal(typeof oPermutive, 'function');
 	});
@@ -85,7 +85,6 @@ describe("OPermutive", () => {
 					projectId: "1",
 					publicApiKey: "key"
 				});
-				
 			});
 
 			afterEach(() => {

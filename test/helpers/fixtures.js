@@ -22,7 +22,7 @@ function insert(html) {
 
 function htmlCode (type) {
 	let config = ` data-o-permutive-projectId="id-123" data-o-permutive-publicApiKey="api-key-456"`;
-	if(type == 'basic') {
+	if(type === 'basic') {
 		config = '';
 	}
 	const html = `
