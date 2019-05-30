@@ -47,92 +47,132 @@ describe("OPermutive", () => {
 		proclaim.equal(typeof window.permutive, 'object');
 	});
 
-	describe("oPermutive is initialised - init()", () => {
-		it("should create a single component when initialized with a root element", () => {
+	context("init() with a selector", () => {
+		it("should create new Permutive() component", () => {
 			fixtures.htmlCode();
-			const boilerplate = oPermutive.init('#element', { consent: true });
-			proclaim.equal(boilerplate instanceof oPermutive, true);
+			const oPermInstance = oPermutive.init({ consent: true }, '#element');
+			proclaim.equal(oPermInstance instanceof oPermutive, true);
 			fixtures.reset();
 		});
 
-		describe("Missing permutive API key or project id", () => {
-			beforeEach(() => {
-				fixtures.htmlCode('basic');
-				try {
-					oPermutive.init(null, { consent: true });
-				} catch (e) {
-					proclaim.equal(e.message, 'o-permutive: Could not initialise. No project ID or public API Key found in options.');
-				}
-			});
+		it("should NOT create a new Permutive() component if selector is invalid", () => {
+			fixtures.htmlCode();
+			try {
+				oPermutive.init({ consent: true }, '#fake-element');
+			} catch(e) {
+				proclaim.equal(e.message, 'o-permutive: could not initialise. No element of type [data-o-component="o-permutive"] found on the page');
+			}
+			fixtures.reset();
+		});
+	});
 
-			afterEach(() => {
-				fixtures.reset();
-			});
+	context("init() with an o-permutive element", () => {
+		it("should create new Permutive() component", () => {
+			fixtures.htmlCode();
+			const el = document.querySelector('#element');
+			const oPermInstance = oPermutive.init({ consent: true }, el);
+			proclaim.equal(oPermInstance instanceof oPermutive, true);
+			fixtures.reset();
+		});
+	});
 
-			it("should not attach the permutive script to the DOM", () => {
-				const permutiveScript = document.getElementById('permutive-script');
-				proclaim.isNull(permutiveScript);
-			});
+	context("init() with no element, o-permative declared in html", () => {
+		it("should create new Permutive() component", () => {
+			fixtures.htmlCode();
+			const oPermInstance = oPermutive.init({ consent: true });
+			proclaim.equal(oPermInstance instanceof oPermutive, true);
+			fixtures.reset();
+		});
+	});
 
-			it("should not bootstrap permutive", () => {
-				proclaim.notOk(window.permutive.config);
+	context("init() with no element, no html", () => {
+		it("should create new Permutive() component", () => {
+			const oPermInstance = oPermutive.init({
+				consent: true,
+				projectId: '123',
+				publicApiKey: 'fake-key'
 			});
+			proclaim.equal(oPermInstance instanceof oPermutive, true);
+		});
+	});
+
+	describe("Missing permutive API key or project id", () => {
+		beforeEach(() => {
+			fixtures.htmlCode('basic');
+			try {
+				oPermutive.init({ consent: true });
+			} catch (e) {
+				proclaim.equal(e.message, 'o-permutive: Could not initialise. No project ID or public API Key found in options.');
+			}
 		});
 
-
-		describe("Consent is NOT set", () => {
-			beforeEach(() => {
-				fixtures.htmlCode('basic');
-				document.cookie = document.cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-				try {
-					oPermutive.init('#element', {
-						projectId: "1",
-						publicApiKey: "key"
-					});
-				} catch(e) {
-					proclaim.equal(e instanceof Error, true);
-					proclaim.equal(e.message, 'o-permutive: Could not initialise. No consent found');
-				}
-			});
-
-			afterEach(() => {
-				fixtures.reset();
-			});
-
-			it("should not attach the permutive script to the DOM", () => {
-				const permutiveScript = document.getElementById('permutive-script');
-				proclaim.isNull(permutiveScript);
-			});
-
-			it("should not bootstrap permutive", () => {
-				proclaim.notOk(window.permutive.config);
-			});
+		afterEach(() => {
+			fixtures.reset();
 		});
 
+		it("should not attach the permutive script to the DOM", () => {
+			const permutiveScript = document.getElementById('permutive-script');
+			proclaim.isNull(permutiveScript);
+		});
 
-		describe('Consent is set via FT cookie', () => {
-			beforeEach(() => {
-				fixtures.htmlCode('basic');
-				document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
-				oPermutive.init('#element', {
+		it("should not bootstrap permutive", () => {
+			proclaim.notOk(window.permutive.config);
+		});
+	});
+
+
+	describe("Consent is NOT set", () => {
+		beforeEach(() => {
+			fixtures.htmlCode('basic');
+			document.cookie = document.cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+			try {
+				oPermutive.init({
 					projectId: "1",
-					publicApiKey: "key",
-					consentFtCookie: true
+					publicApiKey: "key"
 				});
-			});
+			} catch(e) {
+				proclaim.equal(e instanceof Error, true);
+				proclaim.equal(e.message, 'o-permutive: Could not initialise. No consent found');
+			}
+		});
 
-			afterEach(() => {
-				fixtures.reset();
-			});
+		afterEach(() => {
+			fixtures.reset();
+		});
 
-			it("should attach the permutive script", () => {
-				const permutiveScript = document.getElementById('permutive-script');
-				proclaim.ok(permutiveScript);
-			});
+		it("should not attach the permutive script to the DOM", () => {
+			const permutiveScript = document.getElementById('permutive-script');
+			proclaim.isNull(permutiveScript);
+		});
 
-			it("should bootstrap permutive", () => {
-				proclaim.ok(window.permutive.config);
+		it("should not bootstrap permutive", () => {
+			proclaim.notOk(window.permutive.config);
+		});
+	});
+
+
+	describe('Consent is set via FT cookie', () => {
+		beforeEach(() => {
+			fixtures.htmlCode('basic');
+			document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
+			oPermutive.init({
+				projectId: "1",
+				publicApiKey: "key",
+				consentFtCookie: true
 			});
+		});
+
+		afterEach(() => {
+			fixtures.reset();
+		});
+
+		it("should attach the permutive script", () => {
+			const permutiveScript = document.getElementById('permutive-script');
+			proclaim.ok(permutiveScript);
+		});
+
+		it("should bootstrap permutive", () => {
+			proclaim.ok(window.permutive.config);
 		});
 	});
 });

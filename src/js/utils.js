@@ -2,13 +2,10 @@ import merge from 'lodash.merge';
 
 const ATTRIBUTE_PATTERN = 'oPermutive';
 const OPTION_PARENT_NODES = [
-	'appInfo',
-	'contentApi',
-	'contentId',
-	'oComponent',
 	'projectId',
 	'publicApiKey',
-	'userApi'
+	'consent',
+	'consentFtCookie'
 ];
 
 const formatOptionName = key => {
@@ -58,7 +55,31 @@ export const attributeToOption = ({ optKey, optValue }) => {
  * @param {HTML Element} oPermutiveEl
  */
 export function mergeOptions (opts, oPermutiveEl) {
-	return Object.assign({}, getDataAttributes(oPermutiveEl), opts);
+	const options = Object.assign({}, getDataAttributes(oPermutiveEl), opts);
+	Object.keys(options).map(optKey => {
+		options[optKey] = stringToBool(options[optKey]);
+		return optKey;
+	});
+	return options;
+}
+
+
+/**
+ * Convert any "false" or "true" string to boolean
+ * @param {String} string
+ */
+function stringToBool(string) {
+	if(typeof String !== 'string') {
+		return string;
+	}
+	if(string.toLowerCase() === 'false') {
+		return false;
+	}
+	if(string.toLowerCase() === 'true') {
+		return true;
+	}
+
+	return string;
 }
 
 
@@ -77,27 +98,6 @@ export function getDataAttributes(oPermutiveEl) {
 		.map((optKey) => attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }))
 	);
 }
-
-
-/**
- * Get consent based on FTConsent cookie
- * TODO Consents can be derived outside of the package and passed in as config
- */
-export function getConsentFromFtCookie() {
-	// derive consent options from ft consent cookie
-	const re = /FTConsent=([^;]+)/;
-	const match = document.cookie.match(re);
-	if (!match) {
-		// cookie stasis or no consent cookie found
-		return {
-			behavioral: false
-		};
-	}
-	const consentCookie = decodeURIComponent(match[1]);
-
-	return consentCookie.includes('behaviouraladsOnsite:on');
-}
-
 
 /**
  * Attach the permutive script
@@ -119,4 +119,23 @@ export function attachPermutiveScript(projectId) {
 		const HEAD = document.head || document.getElementsByTagName('head')[0];
 		HEAD.appendChild(scriptTag);
 	}
+}
+
+/**
+ * Get consent based on FTConsent cookie
+ * TODO Consents can be derived outside of the package and passed in as config
+ */
+export function getConsentFromFtCookie() {
+	// derive consent options from ft consent cookie
+	const re = /FTConsent=([^;]+)/;
+	const match = document.cookie.match(re);
+	if (!match) {
+		// cookie stasis or no consent cookie found
+		return {
+			behavioral: false
+		};
+	}
+	const consentCookie = decodeURIComponent(match[1]);
+
+	return consentCookie.includes('behaviouraladsOnsite:on');
 }

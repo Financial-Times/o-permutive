@@ -12,15 +12,15 @@ class Permutive {
 
 	/**
 	 * Class constructor.
-	 * @param {HTMLElement} [oPermutiveEl] - The component element in the DOM
 	 * @param {Object} [opts={}] - An options object for configuring the component
+	 * @param {HTMLElement} [oPermutiveEl] - The component element in the DOM
 	 */
-	constructor(oPermutiveEl, opts) {
+	constructor(opts, oPermutiveEl) {
 		if (instance) {
 			return instance;
 		}
 
-		const options = mergeOptions(opts, oPermutiveEl);
+		const options = oPermutiveEl ? mergeOptions(opts, oPermutiveEl): opts;
 		if (!(options.publicApiKey && options.projectId)) {
 			throw new Error('o-permutive: Could not initialise. No project ID or public API Key found in options.');
 		}
@@ -45,25 +45,34 @@ class Permutive {
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 * @returns {(Permutive|Array<Permutive>)} - Permutive instance(s)
 	 */
-	static init(rootEl, opts) {
-		if (!rootEl) {
-			rootEl = document.body;
-		}
-		if (!(rootEl instanceof HTMLElement)) {
-			rootEl = document.querySelector(rootEl);
-		}
-		if (rootEl instanceof HTMLElement) {
-			if (rootEl.matches('[data-o-component="o-permutive"]')) {
-				return new Permutive(rootEl, opts);
-			}
-
-			const permutiveEl = rootEl.querySelector('[data-o-component="o-permutive"]');
+	static init(opts, el) {
+		// No element specified
+		if(!el) {
+			// Try to find an o-permutive element
+			const permutiveEl = document.querySelector('[data-o-component="o-permutive"]');
 			if (permutiveEl) {
-				return new Permutive(permutiveEl, opts);
+				return new Permutive(opts, permutiveEl);
 			}
-
-			console.warn('o-permutive: could not initialise. No element of type [data-o-component="o-permutive"] found on the page');
+			// No o-permutive element found, initialise programaticaly
+			else {
+				return new Permutive(opts);
+			}
 		}
+
+		// Selector for o-permutive component
+		if (!(el instanceof HTMLElement)) {
+			el = document.querySelector(el);
+			if(el) {
+				return new Permutive(opts, el);
+			}
+		}
+
+		// o-permutive HTML component
+		if (el instanceof HTMLElement && el.matches('[data-o-component="o-permutive"]')) {
+			return new Permutive(opts, el);
+		}
+
+		throw new Error('o-permutive: could not initialise. No element of type [data-o-component="o-permutive"] found on the page');
 	}
 
 

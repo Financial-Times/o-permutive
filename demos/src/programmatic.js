@@ -2,18 +2,15 @@
 import Permutive from '../../main.js';
 
 let oPermConf = {
-	appInfo: {
-		appName: "article",
-		contentId: "5cfae92e-6cc5-11e9-80c7-60ee53e6681d",
-	},
 	projectId: "e1c3fd73-dd41-4abd-b80b-4278d52bf7aa",
-	publicApiKey: "b2b3b748-e1f6-4bd5-b2f2-26debc8075a3"
+	publicApiKey: "b2b3b748-e1f6-4bd5-b2f2-26debc8075a3",
+	consent: true
 };
 
 document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 
 // Initialise oPermutive
-Permutive.init(false, oPermConf);
+Permutive.init(oPermConf, false);
 
 // Set the page metadata
 Permutive.setPageMetaData({
