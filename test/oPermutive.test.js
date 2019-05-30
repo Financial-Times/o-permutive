@@ -50,7 +50,7 @@ describe("OPermutive", () => {
 	describe("oPermutive is initialised - init()", () => {
 		it("should create a single component when initialized with a root element", () => {
 			fixtures.htmlCode();
-			const boilerplate = oPermutive.init('#element');
+			const boilerplate = oPermutive.init('#element', { consent: true });
 			proclaim.equal(boilerplate instanceof oPermutive, true);
 			fixtures.reset();
 		});
@@ -58,6 +58,11 @@ describe("OPermutive", () => {
 		describe("Missing permutive API key or project id", () => {
 			beforeEach(() => {
 				fixtures.htmlCode('basic');
+				try {
+					oPermutive.init(null, { consent: true });
+				} catch (e) {
+					proclaim.equal(e.message, 'o-permutive: Could not initialise. No project ID or public API Key found in options.');
+				}
 			});
 
 			afterEach(() => {
@@ -66,12 +71,10 @@ describe("OPermutive", () => {
 
 			it("should not attach the permutive script to the DOM", () => {
 				const permutiveScript = document.getElementById('permutive-script');
-				proclaim.throws(oPermutive.init());
 				proclaim.isNull(permutiveScript);
 			});
 
 			it("should not bootstrap permutive", () => {
-				proclaim.throws(oPermutive.init());
 				proclaim.notOk(window.permutive.config);
 			});
 		});
@@ -81,10 +84,15 @@ describe("OPermutive", () => {
 			beforeEach(() => {
 				fixtures.htmlCode('basic');
 				document.cookie = document.cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-				oPermutive.init('#element', {
-					projectId: "1",
-					publicApiKey: "key"
-				});
+				try {
+					oPermutive.init('#element', {
+						projectId: "1",
+						publicApiKey: "key"
+					});
+				} catch(e) {
+					proclaim.equal(e instanceof Error, true);
+					proclaim.equal(e.message, 'o-permutive: Could not initialise. No consent found');
+				}
 			});
 
 			afterEach(() => {
@@ -102,13 +110,14 @@ describe("OPermutive", () => {
 		});
 
 
-		describe('Consent is set', () => {
+		describe('Consent is set via FT cookie', () => {
 			beforeEach(() => {
 				fixtures.htmlCode('basic');
 				document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 				oPermutive.init('#element', {
 					projectId: "1",
-					publicApiKey: "key"
+					publicApiKey: "key",
+					consentFtCookie: true
 				});
 			});
 

@@ -1,5 +1,5 @@
 import { bootstrapPolyfill, bootstrapConfig } from './bootstrap';
-import { validateOptions, getConsents, attachPermutiveScript } from './utils';
+import { mergeOptions, getConsentFromFtCookie, attachPermutiveScript } from './utils';
 
 // Need to polyfill window.permutive so that it's
 // available to public methods of Permutive class
@@ -20,21 +20,25 @@ class Permutive {
 			return instance;
 		}
 
-		// By default Permutive assumes consent has been given -
-		// we should not run any permutive code when we dont have user
-		// consent for behavioural profiling.
-		if (!getConsents().behavioral) {
-			return false;
+		const options = mergeOptions(opts, oPermutiveEl);
+		if (!(options.publicApiKey && options.projectId)) {
+			throw new Error('o-permutive: Could not initialise. No project ID or public API Key found in options.');
 		}
 
-		const options = validateOptions(opts, oPermutiveEl);
+		// Don't run anything without consent
+		if (options.consent || (options.consentFtCookie && getConsentFromFtCookie)) {
+			// Run the Permutive bootstrap code
+			bootstrapConfig(options.projectId, options.publicApiKey);
 
-		// Run the Permutive bootstrap code
-		bootstrapConfig(options.projectId, options.publicApiKey);
+			attachPermutiveScript(options.projectId);
+			instance = this;
+			return instance;
+		}
+		else {
+			throw new Error('o-permutive: Could not initialise. No consent found');
+		}
+		
 
-		attachPermutiveScript(options.projectId);
-		instance = this;
-		return instance;
 	}
 
 	/**

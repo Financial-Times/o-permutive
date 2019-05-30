@@ -52,19 +52,13 @@ export const attributeToOption = ({ optKey, optValue }) => {
 
 
 /**
- * Validate the configuration options for o-permutive
+ * Merge the options from config object with any declarative options
  *
  * @param {Object} opts
  * @param {HTML Element} oPermutiveEl
  */
-export function validateOptions (opts, oPermutiveEl) {
-	const options = Object.assign({}, opts || getDataAttributes(oPermutiveEl));
-
-	if (!(options.publicApiKey && options.projectId)) {
-		throw new Error('o-permutive: No project ID or public API Key found in options.');
-	}
-
-	return options;
+export function mergeOptions (opts, oPermutiveEl) {
+	return Object.assign({}, getDataAttributes(oPermutiveEl), opts);
 }
 
 
@@ -89,7 +83,7 @@ export function getDataAttributes(oPermutiveEl) {
  * Get consent based on FTConsent cookie
  * TODO Consents can be derived outside of the package and passed in as config
  */
-export function getConsents() {
+export function getConsentFromFtCookie() {
 	// derive consent options from ft consent cookie
 	const re = /FTConsent=([^;]+)/;
 	const match = document.cookie.match(re);
@@ -100,9 +94,8 @@ export function getConsents() {
 		};
 	}
 	const consentCookie = decodeURIComponent(match[1]);
-	return {
-		behavioral: consentCookie.includes('behaviouraladsOnsite:on')
-	};
+	
+	return consentCookie.includes('behaviouraladsOnsite:on');
 }
 
 
