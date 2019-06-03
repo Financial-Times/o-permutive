@@ -4,9 +4,7 @@
 		"husky": "^2.3.0"
 	},
 	"private": true,
-	"dependencies": {
-		"lodash.merge": "^4.6.1"
-	},
+	"dependencies": {},
 	"husky": {
 		"hooks": {
 			"pre-push": "obt verify && obt test"

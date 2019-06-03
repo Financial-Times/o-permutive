@@ -1,5 +1,3 @@
-import merge from 'lodash.merge';
-
 const ATTRIBUTE_PATTERN = 'oPermutive';
 const OPTION_PARENT_NODES = [
 	'projectId',
@@ -94,7 +92,7 @@ export function getDataAttributes(oPermutiveEl) {
 		return {};
 	}
 
-	return merge({}, ...Object.keys(oPermutiveEl.dataset)
+	return Object.assign({}, ...Object.keys(oPermutiveEl.dataset)
 		.map((optKey) => attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }))
 	);
 }
