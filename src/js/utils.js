@@ -95,6 +95,7 @@ export function getDataAttributes(oPermutiveEl) {
 	const dataFromPermutiveEl = Object.keys(oPermutiveEl.dataset)
 		.map((optKey) => attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }));
 
+	// TODO: Support for nested declarative options need a deep merge here
 	return Object.assign({}, ...dataFromPermutiveEl);
 }
 
