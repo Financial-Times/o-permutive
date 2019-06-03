@@ -92,9 +92,10 @@ export function getDataAttributes(oPermutiveEl) {
 		return {};
 	}
 
-	return Object.assign({}, ...Object.keys(oPermutiveEl.dataset)
-		.map((optKey) => attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }))
-	);
+	const dataFromPermutiveEl = Object.keys(oPermutiveEl.dataset)
+		.map((optKey) => attributeToOption({ optKey, optValue: oPermutiveEl.dataset[optKey] }));
+
+	return Object.assign({}, ...dataFromPermutiveEl);
 }
 
 /**
