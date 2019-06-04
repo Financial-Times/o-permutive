@@ -26,7 +26,7 @@ class Permutive {
 		}
 
 		// Don't run anything without consent
-		if (options.consent || (options.consentFtCookie && getConsentFromFtCookie)) {
+		if (options.consent || (options.consentFtCookie && getConsentFromFtCookie())) {
 			// Run the Permutive bootstrap code
 			bootstrapConfig(options.projectId, options.publicApiKey);
 
