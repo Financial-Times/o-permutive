@@ -5,18 +5,24 @@ Note! this is a Work In Progress Component.
 
 A component for adding the [Permutive Data Management Platform to a website](https://developer.permutive.com/).
 
-- [Functionality Overview](#Functionality)
-- [Deployment](#Deployment)
-- [Markup](#markup)
-- [JavaScript](#javascript)
-- [Sass](#sass)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [Migration](#migration)
-- [Contact](#contact)
-- [Licence](#licence)
+- [o-permutive ![Circle CI](https://circleci.com/gh/Financial-Times/o-permutive/tree/master)![MIT licensed](#licence)](#o-permutive-circle-cihttpscirclecicomghfinancial-timeso-permutivetreemastermit-licensedlicence)
+	- [Functionality Overview](#functionality-overview)
+	- [Deployment](#deployment)
+	- [Use](#use)
+		- [Configure and Initialise](#configure-and-initialise)
+			- [Programmatically](#programmatically)
+			- [Declaratively](#declaratively)
+			- [Configuration options](#configuration-options)
+	- [API](#api)
+		- [oPermutive.init()](#opermutiveinit)
+		- [oPermutive.IdentifyUser(userIds)](#opermutiveidentifyuseruserids)
+		- [oPermutive.setPageMetaData(dataObject)](#opermutivesetpagemetadatadataobject)
+	- [Troubleshooting](#troubleshooting)
+	- [Migration](#migration)
+	- [Contact](#contact)
+	- [Licence](#licence)
 
-### Functionality Overview
+## Functionality Overview
 This component will integrate Permutive's Data Management Platform functionality onto a website. Specifically the component will do the following:
 - Runs the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. A global variable, 'permutive' is added to the window object and  a 'command-queue' array is defined under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
 - Checks for user-consent for behavioural profiling - no Permutive code (including the above mentioned bootstrap code) will be run if a user has not consented to behavioural profiling.
@@ -25,14 +31,68 @@ This component will integrate Permutive's Data Management Platform functionality
 - Calls Permutives api function for passing meta-data associated with a page visit.
 - Note; Permutive's code integrates with Google DFP for passing user segments into ad-server requests.
 
-### Deployment
+## Deployment
 The o-permutive component can be deployed in the same way as all standard Origami components; either via the Build-service or as a Bower dependancy, (an NPM compatible version of the component is being worked on for a furture release). See the [Origami tutorials](https://origami.ft.com/docs/tutorials/) for more details on how Origami components can be deployed or integrated into a build-pipeline.
 
-### Configuration
-The component takes a number of different configuration options, these are detailed below.
+## Use
 
-##### Basic config options
-These are the minimum set of config options required to run the Permutive component.
+### Configure and Initialise
+
+There are two ways to configure o-permutive. 
+
+#### Programmatically
+
+```javascript
+import oPermutive from 'o-permutive';
+const config = {
+	projectId: "<Project ID>",
+	publicApiKey: "<API KEY>",
+	consent: true | false,
+	consentFtCookie: true | false
+}
+oPermutive.init(config)
+```
+
+#### Declaratively
+
+You must provide a html element with the following attributes:
+
+```html
+<div id="o-permutive"
+	data-o-component="o-permutive"
+	data-o-permutive-projectId="<Project ID>"
+	data-o-permutive-publicApiKey="<API KEY>"
+	data-o-permutive-consent="true"
+></div>
+```
+
+o-permutive listens for a `o.DOMContentLoaded` event, on which it initialises. 
+
+If using the origami build service, o-permutive will initialise automatically.
+
+Otherwise, you must trigger the event yourself:
+```javascript:
+document.addEventListener('DOMContentLoaded', function() {
+	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
+});
+```
+
+Or you can initialise it by manually calling the `oPermutive.init()` function with the HTML Element
+
+```javascript
+oPermutive.init(null, '#o-permutive');
+
+OR
+
+const permutiveEl = document.getElementById('#o-permutive');
+oPermutive.init(null, permutiveEl);
+
+```
+
+#### Configuration options
+
+o-permutive takes the following configuration options. These can be specified either through a config opbject or as data attribues on an element (see above).
+
 
 | Name              | Key               |   Type   | Required?| Notes |
 |-------------------|-------------------|----------|---------:|-------|
@@ -41,85 +101,69 @@ These are the minimum set of config options required to run the Permutive compon
 | User consent      | consent        | Boolean true/false default is false  | no       |  The component will not run any Permutive code unless user consent has been explicitly given. This can be passed in as a config.
 | Use FT consent cookie| consentFtCookie | Bolean true/false | no |If true, user consent will be derived via the FTConsent cookie |
 
-##### User identification config options  
-Supply these config options if you wish to make use of Permutive's User Identity Matching features whereby Permutive's unique user ID can be mapped to first-party User IDs. This would be needed for cross-device User matching for example.
+## API
+
+### oPermutive.init()
+
+Configure and initialise the permutive instance (see above for details)
+
+*Example:*
+```javascript
+oPermutive.init(config);
+```
+
+### oPermutive.IdentifyUser(userIds)
+
+Use if you wish to make use of Permutive's User Identity Matching features whereby Permutive's unique user ID can be mapped to first-party User IDs. This would be needed for cross-device User matching for example.
 
 | Name              | |Data-structure              | Required?| Notes |
 |-------------------|---|-----------------------------|---------:|-------|
 | User IDs Array    | userIDs  | Array of objects. See example below | yes, see notes | Required if cross device user matching is required |
 
-###### Example config object for User Ids
-
+*Example:*
 ```javascript
-userIds = [
+oPermutive.identifyUser([
 	{
-		id: <userID>,
+		id: '<userID>',
 		tag: 'SporeID'
 	},
 	{
-		id: <userID>,
+		id: '<userID>',
 		tag: 'GUID'
 	}
-]
+])
 ```
 
-##### Page metadata options
-The following data-points may be passed to Permutive on each page request. All data-points are optional; however the schema is fixed, meaning that any data passed that is not in the format specified below will be rejected.
+
+### oPermutive.setPageMetaData(dataObject)
+Send metadata about the current request to permutive. All data-points are optional; however the schema is fixed, meaning that any data passed that is not in the format specified below will be rejected.
 Any data-point below may be omitted if it is not available or not relevant for the page request.
 
+*Example:*
 ```javascript
-page = {
-	"type": "<STRING>", // e.g. "home" or "article"
-	"article": {
-		"id": "<STRING>",
-		"title": "<STRING>",
-		"type": "<STRING>", // genre
-		"organisations": ["<LIST>", "<OF>", "<STRINGS>"],
-		"people": ["<LIST>", "<OF>", "<STRINGS>"],
-		"categories": ["<LIST>", "<OF>", "<STRINGS>"],
-		"authors": ["<LIST>", "<OF>", "<STRINGS>"],
-		"topics": ["LIST", "OF", "STRINGS"],
-		"admants": ["LIST", "OF", "STRINGS"]
-	},
-	"user": {
-		"industry": "<STRING>",
-		"position": "<STRING>",
-		"responsibility": "<STRING>"
+oPermutive.setPageMetaData({ 
+	page: {
+		"type": "<STRING>", // e.g. "home" or "article"
+		"article": {
+			"id": "<STRING>",
+			"title": "<STRING>",
+			"type": "<STRING>", // genre
+			"organisations": ["<LIST>", "<OF>", "<STRINGS>"],
+			"people": ["<LIST>", "<OF>", "<STRINGS>"],
+			"categories": ["<LIST>", "<OF>", "<STRINGS>"],
+			"authors": ["<LIST>", "<OF>", "<STRINGS>"],
+			"topics": ["LIST", "OF", "STRINGS"],
+			"admants": ["LIST", "OF", "STRINGS"]
+		},
+		"user": {
+			"industry": "<STRING>",
+			"position": "<STRING>",
+			"responsibility": "<STRING>"
+		}
 	}
-}
+})
 ```
 
-### Markup
-
-
-```html
-<div data-o-component="o-permutive" class='o-permutive'>
-</div>
-```
-
-### JavaScript
-
-
-No code will run automatically unless you are using the Build Service.
-You must either construct an `o-permutive` object or fire the `o.DOMContentLoaded` event, which oComponent listens for.
-
-#### Constructing an o-permutive
-
-```js
-const oPermutive = require('o-permutive');
-oPermutive.init();
-```
-
-#### Firing an oDomContentLoaded event
-
-```js
-require('o-permutive');
-
-document.addEventListener('DOMContentLoaded', function() {
-	document.dispatchEvent(new CustomEvent('o.DOMContentLoaded'));
-});
-```
-TODO - documentation.
 
 ## Troubleshooting
 
