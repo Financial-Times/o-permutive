@@ -47,7 +47,9 @@ class Permutive {
 	 */
 	static init(opts, el) {
 		// Permutive must not run in the editorial preview functionality
-		if( /^(.*\.)?preview\./.test(window.location.host) ){ return false;}
+		if (typeof window !== 'undefined' && window.location) {
+			if( /^(.*\.)?preview\./.test(window.location.host) ){ return false;}
+		}
 		// No element specified
 		if(!el) {
 			// Try to find an o-permutive element
