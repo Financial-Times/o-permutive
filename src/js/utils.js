@@ -105,15 +105,15 @@ export function getDataAttributes(oPermutiveEl) {
  * @param {String} projectId
  */
 export function attachPermutiveScript(projectId) {
-	const permutiveURI = `https://cdn.permutive.com/${projectId}-web.js`;
+	const permutiveURI = 'https://cdn.permutive.com/' + projectId + '-web.js';
 
-	if (!document.querySelector(`script[src="${permutiveURI}"]`)) {
+	if (!document.querySelector('script[src="' + permutiveURI + '"]')) {
 		const scriptTag = document.createElement("script");
 		Object.assign(scriptTag, {
 			async: "true",
 			type: "text/javascript",
 			id: "permutive-script",
-			src: permutiveURI,
+			src: permutiveURI
 		});
 
 		const HEAD = document.head || document.getElementsByTagName('head')[0];
