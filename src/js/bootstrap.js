@@ -4,7 +4,7 @@
 // However, since origami components are intialised on DomContentLoaded event
 // it's possible to have a situation where window.permutive is accessed before
 // Permutive.init() has had a chance to call the bootstrap script (see declarative demo)
-// 
+//
 // bootstrapPolyfill() is called immediately on importing or loading o-permutive
 // and botstrapConfig() is called once the component has been initialised.
 
@@ -27,6 +27,12 @@ export function bootstrapPolyfill () {
 			}
 		}
 	}(document, window.permutive);
+	window.googletag = window.googletag || {}, window.googletag.cmd = window.googletag.cmd || [], window.googletag.cmd.push(function () {
+		if (0 === window.googletag.pubads().getTargeting("permutive").length) {
+			var g = window.localStorage.getItem("_pdfps");
+			window.googletag.pubads().setTargeting("permutive", g ? JSON.parse(g) : [])
+		}
+	});
 }
 
 export function bootstrapConfig (id, key) {
@@ -38,13 +44,4 @@ export function bootstrapConfig (id, key) {
 			e.config = i || {}, e.config.projectId = o, e.config.apiKey = r, e.config.environment = e.config.environment || "production";
 		}
 	}(window.permutive, id, key, {});
-
-
-	window.googletag = window.googletag || {}, window.googletag.cmd = window.googletag.cmd || [], window.googletag.cmd.push(function () {
-		if (0 === window.googletag.pubads().getTargeting("permutive").length) {
-			var g = window.localStorage.getItem("_pdfps");
-			window.googletag.pubads().setTargeting("permutive", g ? JSON.parse(g) : [])
-		}
-	});
-
 }
