@@ -34,9 +34,7 @@ class Permutive {
 			instance = this;
 			return instance;
 		}
-		else {
-			throw new Error('o-permutive: Could not initialise. No consent found');
-		}
+
 	}
 
 	/**
