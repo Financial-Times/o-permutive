@@ -131,9 +131,7 @@ export function getConsentFromFtCookie() {
 	const match = document.cookie.match(re);
 	if (!match) {
 		// cookie stasis or no consent cookie found
-		return {
-			behavioral: false
-		};
+		return false;
 	}
 	const consentCookie = decodeURIComponent(match[1]);
 
