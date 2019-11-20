@@ -124,16 +124,12 @@ describe("OPermutive", () => {
 	describe("Consent is NOT set", () => {
 		beforeEach(() => {
 			fixtures.htmlCode('basic');
-			document.cookie = document.cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-			try {
-				oPermutive.init({
-					projectId: "1",
-					publicApiKey: "key"
-				});
-			} catch(e) {
-				proclaim.equal(e instanceof Error, true);
-				proclaim.equal(e.message, 'o-permutive: Could not initialise. No consent found');
-			}
+			document.cookie = 'foo=foo;';
+			oPermutive.init({
+				projectId: "1",
+				publicApiKey: "key",
+				consentFtCookie: true
+			});
 		});
 
 		afterEach(() => {
