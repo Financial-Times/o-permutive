@@ -124,12 +124,12 @@ describe("OPermutive", () => {
 	describe("Consent is NOT set", () => {
 		beforeEach(() => {
 			fixtures.htmlCode('basic');
-			document.cookie =  'foo=foo;';
-				oPermutive.init({
-					projectId: "1",
-					publicApiKey: "key",
-					consentFtCookie: true
-				});
+			document.cookie = 'foo=foo;';
+			oPermutive.init({
+				projectId: "1",
+				publicApiKey: "key",
+				consentFtCookie: true
+			});
 		});
 
 		afterEach(() => {
