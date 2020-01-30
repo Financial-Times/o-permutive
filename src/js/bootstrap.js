@@ -27,12 +27,7 @@ export function bootstrapPolyfill () {
 			}
 		}
 	}(document, window.permutive);
-	window.googletag = window.googletag || {}, window.googletag.cmd = window.googletag.cmd || [], window.googletag.cmd.push(function () {
-		if (0 === window.googletag.pubads().getTargeting("permutive").length) {
-			var g = window.localStorage.getItem("_pdfps");
-			window.googletag.pubads().setTargeting("permutive", g ? JSON.parse(g) : [])
-		}
-	});
+
 }
 
 export function bootstrapConfig (id, key) {
@@ -44,4 +39,10 @@ export function bootstrapConfig (id, key) {
 			e.config = i || {}, e.config.projectId = o, e.config.apiKey = r, e.config.environment = e.config.environment || "production";
 		}
 	}(window.permutive, id, key, {});
+	window.googletag = window.googletag || {}, window.googletag.cmd = window.googletag.cmd || [], window.googletag.cmd.push(function () {
+		if (0 === window.googletag.pubads().getTargeting("permutive").length) {
+			var g = window.localStorage.getItem("_pdfps");
+			window.googletag.pubads().setTargeting("permutive", g ? JSON.parse(g) : [])
+		}
+	});
 }
