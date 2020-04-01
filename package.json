@@ -1,6 +1,6 @@
 {
 	"devDependencies": {
-		"eslint-config-origami-component": "^1.0.0",
+		"eslint-config-origami-component": "^2.0.1",
 		"husky": "^2.3.0"
 	},
 	"private": true,
