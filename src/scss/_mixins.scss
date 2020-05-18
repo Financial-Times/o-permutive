@@ -11,4 +11,4 @@
 /// @access Private
 @mixin _oPermutive($message) {
 	@error '*** oPermutive SCSS error: #{$message} ***';
-};
+}
