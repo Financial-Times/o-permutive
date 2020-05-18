@@ -1,4 +1,3 @@
-/*global require*/
 import Permutive from '../../main.js';
 
 let oPermConf = {
