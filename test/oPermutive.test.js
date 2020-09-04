@@ -1,8 +1,8 @@
 /* eslint-env mocha */
 /* global proclaim, sinon */
-import * as fixtures from './helpers/fixtures';
+import * as fixtures from './helpers/fixtures.js';
 
-import oPermutive from './../main';
+import oPermutive from './../main.js';
 
 function resetOPermutive() {
 	oPermutive.resetInstance();

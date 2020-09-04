@@ -1,5 +1,5 @@
-import { bootstrapPolyfill, bootstrapConfig } from './bootstrap';
-import { mergeOptions, getConsentFromFtCookie, attachPermutiveScript } from './utils';
+import { bootstrapPolyfill, bootstrapConfig } from './bootstrap.js';
+import { mergeOptions, getConsentFromFtCookie, attachPermutiveScript } from './utils.js';
 
 // Need to polyfill window.permutive so that it's
 // available to public methods of Permutive class
