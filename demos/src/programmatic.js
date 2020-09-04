@@ -1,4 +1,4 @@
-import Permutive from '../../main.js';
+import Permutive from '../../main.js.js';
 
 let oPermConf = {
 	projectId: "e1c3fd73-dd41-4abd-b80b-4278d52bf7aa",

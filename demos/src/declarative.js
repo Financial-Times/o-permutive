@@ -1,5 +1,5 @@
 import Permutive from '../../main.js';
-import './demo';
+import './demo.js';
 
 document.cookie = 'FTConsent=behaviouraladsOnsite%3Aon;';
 

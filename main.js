@@ -1,4 +1,4 @@
-import Permutive from './src/js/permutive';
+import Permutive from './src/js/permutive.js';
 
 const constructAll = function () {
 	Permutive.init();
