@@ -80,7 +80,7 @@ class Permutive {
 
 	/**
 	 * Send User Identity data to Permutive
-	 * @param {Object} userIds
+	 * @param {Object} userIden
 	 */
 	static identifyUser(userIden) {
 		window.permutive.identify(userIden);

@@ -32,6 +32,5 @@ Permutive.setPageMetaData({
 });
 
 Permutive.identifyUser({
-	spoorID: 'spoor-id',
 	guid: '1234-5678'
 });

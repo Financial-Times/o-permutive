@@ -27,7 +27,7 @@ This component will integrate Permutive's Data Management Platform functionality
 - Runs the Permutive 'bootstrap' code, this code has been provided by Permutive and is intended to be run before any other Permutive code. A global variable, 'permutive' is added to the window object and a 'command-queue' array is defined under the window.permutive global object which holds functions which will be called when the Permutive main script is attached and ready. The bootstrap code also sets-up the Permutive-DFP integration (GPT).
 - Checks for user-consent for behavioural profiling - no Permutive code (including the above mentioned bootstrap code) will be run if a user has not consented to behavioural profiling.
 - Attaches the main Permutive JS file to the page DOM.
-- Calls Permutive's api function to link Permutive's unique id assigned to a user/device with first-party ID's (e.g. User GUIDs, SpoorIDs). This is configurable.
+- Calls Permutive's api function to link Permutive's unique id assigned to a user/device with first-party ID's the user's GUID is used. This is configurable.
 - Calls Permutives api function for passing meta-data associated with a page visit.
 - Note; Permutive's code integrates with Google DFP for passing user segments into ad-server requests.
 
@@ -126,10 +126,6 @@ _Example:_
 
 ```javascript
 oPermutive.identifyUser([
-	{
-		id: "<userID>",
-		tag: "SporeID",
-	},
 	{
 		id: "<userID>",
 		tag: "GUID",
