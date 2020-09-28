@@ -82,7 +82,14 @@ class Permutive {
 	 * Send User Identity data to Permutive
 	 * @param {Object} userIden
 	 */
-	static identifyUser(userIden) {
+	static identifyUser(userIden = []) {
+
+		// ADSDEV-603: SpoorId shouldn't be used to identify users, to prevent any future use of spoorID, log a warning
+		let hasSpoorID = userIden.filter(iden => iden.tag.toLowerCase() === 'sporeid' || iden.tag.toLowerCase() === 'spoorid').length;
+
+		if (hasSpoorID) {
+			console.warn('[identifyUser]: SpoorID should not be used as a way to identify the user as it causes user duplication issues with Permutive')
+		}
 		window.permutive.identify(userIden);
 	}
 
