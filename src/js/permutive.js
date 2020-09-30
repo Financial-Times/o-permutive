@@ -84,11 +84,11 @@ class Permutive {
 	 */
 	static identifyUser(userIden = []) {
 
-		// ADSDEV-603: SpoorId shouldn't be used to identify users, to prevent any future use of spoorID, log a warning
-		let hasSpoorID = userIden.filter(iden => iden.tag.toLowerCase() === 'sporeid' || iden.tag.toLowerCase() === 'spoorid').length;
+		// ADSDEV-603: Multiple user identifiers causes issues with permutive due to duplication
+		let hasMultipleIds = userIden.length > 1;
 
-		if (hasSpoorID) {
-			console.warn('[identifyUser]: SpoorID should not be used as a way to identify the user as it causes user duplication issues with Permutive');
+		if (hasMultipleIds) {
+			console.warn('[identifyUser]: Multiple ids are deprecated and will be removed on the next major, user guid is preffered');
 		}
 		window.permutive.identify(userIden);
 	}
