@@ -88,7 +88,7 @@ class Permutive {
 		let hasSpoorID = userIden.filter(iden => iden.tag.toLowerCase() === 'sporeid' || iden.tag.toLowerCase() === 'spoorid').length;
 
 		if (hasSpoorID) {
-			console.warn('[identifyUser]: SpoorID should not be used as a way to identify the user as it causes user duplication issues with Permutive')
+			console.warn('[identifyUser]: SpoorID should not be used as a way to identify the user as it causes user duplication issues with Permutive');
 		}
 		window.permutive.identify(userIden);
 	}
