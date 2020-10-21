@@ -82,7 +82,14 @@ class Permutive {
 	 * Send User Identity data to Permutive
 	 * @param {Object} userIden
 	 */
-	static identifyUser(userIden) {
+	static identifyUser(userIden = []) {
+
+		// ADSDEV-603: Multiple user identifiers causes issues with permutive due to duplication
+		let hasMultipleIds = userIden.length > 1;
+
+		if (hasMultipleIds) {
+			console.warn('[identifyUser]: Multiple ids are deprecated and will be removed on the next major, user guid is preffered');
+		}
 		window.permutive.identify(userIden);
 	}
 

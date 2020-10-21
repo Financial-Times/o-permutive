@@ -122,14 +122,17 @@ Use if you wish to make use of Permutive's User Identity Matching features where
 | -------------- | ------- | ----------------------------------- | -------------: | -------------------------------------------------- |
 | User IDs Array | userIDs | Array of objects. See example below | yes, see notes | Required if cross device user matching is required |
 
+
+Note: o-permutive will log a warning if you try using more than one user identifier, it has been deprecated since it causes user duplication issues on permutive end
+
 _Example:_
 
 ```javascript
 oPermutive.identifyUser([
 	{
 		id: "<userID>",
-		tag: "GUID",
-	},
+		tag: "GUID"
+	}
 ])
 ```
 
