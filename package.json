@@ -3,7 +3,7 @@
 		"eslint": "^7.20.0",
 		"eslint-config-origami-component": "^2.1.1",
 		"husky": "^5.0.9",
-		"origami-ci-tools": "^2.3.0"
+		"origami-ci-tools": "^2.4.0"
 	},
 	"private": true,
 	"dependencies": {},
