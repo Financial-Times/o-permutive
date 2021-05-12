@@ -14,7 +14,7 @@ jobs:
     - name: Repository name
       id: repo_name
       run: echo ::set-output name=REPO_NAME::${GITHUB_REPOSITORY/*\//}
-    - uses: jwalton/gh-find-current-pr@v1
+    - uses: jwalton/gh-find-current-pr@v1.0.3
       id: findPr
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
