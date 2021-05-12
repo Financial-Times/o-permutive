@@ -12,7 +12,7 @@ jobs:
   percy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
     - uses: Financial-Times/origami-percy@v1
       with:
         github-token: ${{secrets.ORIGAMI_FOX_ACCESS_TOKEN}} # To comment as the Fox mascot GitHub user
